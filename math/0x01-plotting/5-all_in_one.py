@@ -36,6 +36,8 @@ plt.suptitle("All in One")
 fig.add_subplot(321)
 plt.plot(y0, color='red')
 plt.xlim(0, 10)
+plt.xticks(np.arange(0, 11, 2))
+plt.yticks(np.arange(0, 1500, 500))
 
 # Task 1
 
@@ -70,6 +72,8 @@ plt.legend(loc='upper right', fontsize='x-small')
 # Task 4
 
 fig.add_subplot(313)
+plt.xticks(np.arange(0, 110, 10))
+plt.yticks(np.arange(0, 40, 10))
 plt.xlabel('Grades', fontsize='x-small')
 plt.ylabel('Number of Students', fontsize='x-small')
 plt.xticks(range(0, 101, 10))
