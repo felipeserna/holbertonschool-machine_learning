@@ -15,6 +15,9 @@ def poly_integral(poly, C=0):
     if len(poly) == 0:
         return None
 
+    if poly == [0]:
+        return [C]
+
     inte = [C]
     for coef in range(len(poly)):
         new_coef = poly[coef]/(coef + 1)
