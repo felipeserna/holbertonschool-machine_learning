@@ -9,18 +9,14 @@ def poly_derivative(poly):
     if type(poly) is not list:
         return None
 
-    if len(poly) <= 0:
+    if len(poly) == 0:
         return None
 
-    for coef in poly:
-        if type(coef) is not int and type(coef) is not float:
-            return None
+    if len(poly) == 1:
+        return [0]
 
     deri = []
-    for coef in poly:
-        deri.append(coef * poly.index(coef))
-    if deri == [0]:
-        return [0]
-    if deri.index(0) == 0:
-        deri.pop(0)
+    for coef in range(len(poly)):
+        deri.append(coef * poly[coef])
+    deri.pop(0)
     return deri
