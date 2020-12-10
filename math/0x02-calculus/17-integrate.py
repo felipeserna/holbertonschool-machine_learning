@@ -17,5 +17,9 @@ def poly_integral(poly, C=0):
 
     inte = [C]
     for coef in range(len(poly)):
-        inte.append(poly[coef]/(coef + 1))
+        new_coef = poly[coef]/(coef + 1)
+        if (new_coef).is_integer():
+            inte.append(round(new_coef))
+        else:
+            inte.append(new_coef)
     return inte
