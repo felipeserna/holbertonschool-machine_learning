@@ -14,4 +14,6 @@ def poly_derivative(poly):
         deri.append(coef * poly.index(coef))
     if deri.index(0) == 0:
         deri.pop(0)
+    if deri == [0]:
+        return [0]
     return deri
