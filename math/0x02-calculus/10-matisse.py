@@ -9,6 +9,9 @@ def poly_derivative(poly):
     if type(poly) is not list:
         return None
 
+    if len(poly) <= 0:
+        return None
+
     deri = []
     for coef in poly:
         deri.append(coef * poly.index(coef))
