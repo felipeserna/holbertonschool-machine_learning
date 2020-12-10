@@ -12,6 +12,10 @@ def poly_derivative(poly):
     if len(poly) <= 0:
         return None
 
+    for coef in poly:
+        if type(coef) is not int and type(coef) is not float:
+            return None
+
     deri = []
     for coef in poly:
         deri.append(coef * poly.index(coef))
@@ -19,5 +23,4 @@ def poly_derivative(poly):
         return [0]
     if deri.index(0) == 0:
         deri.pop(0)
-    
     return deri
