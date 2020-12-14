@@ -35,8 +35,6 @@ class Poisson:
         Calculates the value of the PMF for a given number of “successes”
         k is the number of “successes”
         """
-        """if type(k) is not int:
-            self.k = int(k)"""
         k = int(k)
         if k < 0:
             return 0
