@@ -4,6 +4,9 @@ Represents a poisson distribution
 """
 
 
+e = 2.7182818285
+
+
 class Poisson:
     """Represents a poisson distribution"""
     def __init__(self, data=None, lambtha=1.):
@@ -26,3 +29,22 @@ class Poisson:
             else:
                 # calculate lambtha of the data
                 self.lambtha = float(sum(data)/len(data))
+
+    def pmf(self, k):
+        """
+        Calculates the value of the PMF for a given number of “successes”
+        k is the number of “successes”
+        """
+        """if type(k) is not int:
+            self.k = int(k)"""
+        k = int(k)
+        if k < 0:
+            return 0
+        return ((e**(self.lambtha*(-1))*self.lambtha**k)/self.factorial(k))
+
+    def factorial(self, k):
+        """Calculates the factorial of k"""
+        if k == 0:
+            return 1
+        else:
+            return (k * self.factorial(k-1))
