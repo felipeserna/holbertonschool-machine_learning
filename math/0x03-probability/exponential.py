@@ -35,6 +35,15 @@ class Exponential:
         Calculates the value of the PDF for a given time period
         x is the time period
         """
-        if x <= 0:
+        if x < 0:
             return 0
         return (self.lambtha * e**((-1)*self.lambtha*x))
+
+    def cdf(self, x):
+        """
+        Calculates the value of the CDF for a given time period
+        x is the time period
+        """
+        if x < 0:
+            return 0
+        return (1-e**((-1)*self.lambtha*x))
