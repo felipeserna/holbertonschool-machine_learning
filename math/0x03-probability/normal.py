@@ -56,3 +56,15 @@ class Normal:
         """
         return (e**((-1*(x - self.mean)**2)/(2*self.stddev**2)) /
                 (self.stddev*(2*pi)**0.5))
+
+    def cdf(self, x):
+        """
+        Calculates the value of the CDF for a given x-value
+        x is the x-value
+        """
+        return (0.5 * (1 + self.erf((x-self.mean)/(self.stddev*(2**0.5)))))
+
+    def erf(self, x):
+        """error function"""
+        return ((2/(pi**0.5)) *
+                (x - (x**3) / 3 + (x**5) / 10 - (x**7) / 42 + (x**9) / 216))
