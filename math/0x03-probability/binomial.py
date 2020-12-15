@@ -1,0 +1,40 @@
+#!/usr/bin/env python3
+"""
+Represents a binomial distribution
+"""
+
+
+class Binomial:
+    """Represents a binomial distribution"""
+    def __init__(self, data=None, n=1, p=0.5):
+        """
+        Class constructor
+        - data is a list of the data to be used to estimate the distribution
+        - n is the number of Bernoulli trials
+        - p is the probability of a “success”
+        """
+        if data is None:
+            if n <= 0:
+                raise ValueError("n must be a positive value")
+            if p <= 0 or p >= 1:
+                raise ValueError("p must be greater than 0 and less than 1")
+            else:
+                # Saves n as an integer and p as a float
+                self.n = int(n)
+                self.p = float(p)
+        else:
+            if type(data) is not list:
+                raise TypeError("data must be a list")
+            if len(data) < 2:
+                raise ValueError("data must contain multiple values")
+            else:
+                # Calculate n and p from data
+                # Round n to the nearest integer
+                # Calculate p first and then calculate n. Then recalculate p
+                mean = float(sum(data)/len(data))
+                variance = float(sum((x - mean)**2 for x in data) /
+                                 len(data))
+                p = 1 - variance/mean
+                self.n = round(mean/p)
+                # Recalculating p for more precision because of rounding n
+                self.p = float(mean/self.n)
