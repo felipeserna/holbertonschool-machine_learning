@@ -26,8 +26,8 @@ class Neuron:
         self.__b = 0
         # activated output of the neuron (prediction)
         self.__A = 0
-        # getter functions
 
+    # getter functions
     @property
     def W(self):
         """Retrieves the weights vector"""
