@@ -138,10 +138,7 @@ class NeuralNetwork:
         m = Y.shape[1]
         dW2 = (1/m)*np.matmul(dZ2, A1.T)
         db2 = (1/m)*np.sum(dZ2, axis=1, keepdims=True)
-        # derivative of sigmoid function in Z1
-        Z1 = np.matmul(self.__W1, X) + self.__b1
-        dsig_z1 = np.exp(Z1)/(np.exp(Z1) + 1) ^ 2
-        dZ1 = np.matmul(self.__W2.T, dZ2) * dsig_z1
+        dZ1 = np.matmul(self.__W2.T, dZ2)*A1*(1 - A1)
         dW1 = (1/m)*np.matmul(dZ1, X.T)
         db1 = (1/m)*np.sum(dZ1, axis=1, keepdims=True)
         # update of __W1, __b1, __W2, and __b2
