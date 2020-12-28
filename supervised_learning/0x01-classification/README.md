@@ -1,7 +1,6 @@
 # 0x01. Classification
 ## Specializations - Machine Learning ― Supervised Learning
 
-Background Context
 At the end of this project, you should be able to build your own binary image classifier from scratch using numpy.
 
 ## Learning Objectives
