@@ -126,15 +126,15 @@ class DeepNeuralNetwork:
         - You are allowed to use one loop
         """
         m = Y.shape[1]
-        for i in range(self.__L, 1, -1):
-            dZ2 = self.__cache["A{}".format(i)] - Y        
-            dW2 = (1/m)*np.matmul(dZ2, self.__cache["A{}".format(i-1)].T)
-            db2 = (1/m)*np.sum(dZ2, axis=1, keepdims=True)
-            dZ1 = np.matmul(self.__weights["W{}".format(i)].T, dZ2)*self.__cache["A{}".format(i-1)]*(1 - self.__cache["A{}".format(i-1)])
-            dW1 = (1/m)*np.matmul(dZ1, self.__cache["A{}".format(i-2)].T)
-            db1 = (1/m)*np.sum(dZ1, axis=1, keepdims=True)
-            # update of __W1, __b1, __W2, and __b2
-            self.__weights["W{}".format(i-1)] = self.__weights["W{}".format(i-1)] - alpha*dW1
-            self.__weights["b{}".format(i-1)] = self.__weights["b{}".format(i-1)] - alpha*db1
-            self.__weights["W{}".format(i)] = self.__weights["W{}".format(i)] - alpha*dW2
-            self.__weights["b{}".format(i)] = self.__weights["b{}".format(i)] - alpha*db2
+        dZ = self.__cache["A{}".format(self.__L)] - Y
+        for i in range(self.__L, 0, -1):
+            A = "A{}".format(i-1)
+            W = "W{}".format(i)
+            b = "b{}".format(i)
+            dW = (1/m)*np.matmul(dZ, self.__cache[A].T)
+            db = (1/m)*np.sum(dZ, axis=1, keepdims=True)
+            dZ = np.matmul(self.__weights[W].T, dZ) * (self.__cache[A] *
+                                                       (1 - self.__cache[A]))
+            # update of __weights
+            self.__weights[W] = self.__weights[W] - alpha*dW
+            self.__weights[b] = self.__weights[b] - alpha*db
