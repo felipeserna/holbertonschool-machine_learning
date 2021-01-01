@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Contains the DeepNeuralNetwork class"""
+"""
+Performs multiclass classification
+Allows different activation functions
+"""
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -8,20 +11,19 @@ import pickle
 
 class DeepNeuralNetwork:
     """
-    DeepNeuralNetwork class
-    defines a deep neural network
-    performing binary classification:
+    Performs multiclass classification
+    Allows different activation functions
     """
 
     def __init__(self, nx, layers, activation='sig'):
         """
         Class constructor
-        :param nx: the number of input features
-        :param layers: list representing the number of nodes
-        :param activation: type of activation func used in the hidden layers
-            sig a sigmoid activation
-            tanh a tanh activation
-        in each layer of the network
+        - nx is the number of input features
+        - layers is a list representing the number of nodes
+          in each layer of the network
+        - activation: type of activation function used
+            * sig a sigmoid activation
+            * tanh a tanh activation
         """
         if not isinstance(nx, int):
             raise TypeError("nx must be an integer")
@@ -58,31 +60,38 @@ class DeepNeuralNetwork:
 
     @property
     def L(self):
-        """property to retrieve L"""
+        """Retrieves L"""
         return self.__L
 
     @property
     def cache(self):
-        """property to retrieve b1"""
+        """Retrieves cache"""
         return self.__cache
 
     @property
     def weights(self):
-        """property to retrieve A1"""
+        """Retrieves weights"""
         return self.__weights
 
     @property
     def activation(self):
-        """ type of activation function used in the hidden layers """
+        """Retrieves activation function"""
         return self.__activation
 
     def forward_prop(self, X):
         """
         Calculates the forward propagation of the neural network
-        :param X: a numpy.ndarray with shape (nx, m)
-        that contains the input data
-        :return: the output of the neural network and the cache,
-        respectively
+        X is a numpy.ndarray with shape (nx, m) that contains the input data
+        - nx is the number of input features to the neuron
+        - m is the number of examples
+        Updates the private attribute __cache
+        - The activated outputs of each layer should be saved
+          in the __cache dictionary using the key A{l} where {l}
+          is the hidden layer the activated output belongs to
+        - X should be saved to the cache dictionary using the key A0
+        All neurons should use a sigmoid activation function
+        You are allowed to use one loop
+        Returns the output of the neural network and the cache, respectively
         """
         self.__cache['A0'] = X
 
@@ -108,25 +117,24 @@ class DeepNeuralNetwork:
     def cost(self, Y, A):
         """
         Calculates the cost of the model using logistic regression
-        :param Y: numpy.ndarray with shape (1, m)
-        that contains the correct labels for the input data
-        :param A: numpy.ndarray with shape (1, m)
-        containing the activated output of the neuron for each example
-        :return: the cost
+        - Y is a numpy.ndarray with shape (1, m) that contains
+          the correct labels for the input data
+        - A is a numpy.ndarray with shape (1, m) containing
+          the activated output of the neuron for each example
+        Returns the cost
         """
         m = Y.shape[1]
         return -(1/m) * np.sum(Y * np.log(A))
 
     def evaluate(self, X, Y):
         """
-        Evaluates the neural network’s predictions
-        :param X: a numpy.ndarray with shape (nx, m)
-            that contains the input data
-            nx is the number of input features to the neuron
-            m is the number of examples
-        :param Y:  is a numpy.ndarray with shape (1, m)
-            that contains the correct labels for the input data
-        :return: the neuron’s prediction and the cost of the network
+        - Evaluates the neural network’s predictions
+        - Returns the neuron’s prediction and the cost of the network,
+          respectively
+          * The prediction should be a numpy.ndarray with shape (1, m)
+            containing the predicted labels for each example
+          * The label values should be 1 if the output of the
+            network is >= 0.5 and 0 otherwise
         """
         self.forward_prop(X)[0]
         key = "A" + str(self.__L)
@@ -137,11 +145,11 @@ class DeepNeuralNetwork:
     def gradient_descent(self, Y, cache, alpha=0.05):
         """
         Calculates one pass of gradient descent on the neural network
-        :param Y: numpy.ndarray with shape (1, m)
-            that contains the correct labels for the input data
-        :param cache: dictionary containing all the intermediary
-            values of the network
-        :param alpha: the learning rate
+        - cache is a dictionary containing all the intermediary values
+          of the network
+        - alpha is the learning rate
+        - Updates the private attribute __weights
+        - You are allowed to use one loop
         """
         weights = self.__weights.copy()
         m = Y.shape[1]
@@ -172,21 +180,10 @@ class DeepNeuralNetwork:
     def train(self, X, Y, iterations=5000, alpha=0.05,
               verbose=True, graph=True, step=100):
         """
-        Trains the neural network
-        :param X: is a numpy.ndarray with shape (nx, m)
-            that contains the input data
-        :param Y: is a numpy.ndarray with shape (1, m)
-            that contains the correct labels for the input data
-        :param iterations: is the number of iterations to train over
-        :param alpha: is the learning rate
-        :param verbose: is a boolean that defines whether or
-            not to print information about the training
-        :param graph: is a boolean that defines whether or
-            not to graph information about the training once
-            the training has completed
-        :param step: visualization step for both verbose and graph
-        :return: the evaluation of the training data after
-            iterations of training have occurred
+        Trains the deep neural network by updating __weights and __cache
+        - You are allowed to use one loop
+        - Returns the evaluation of the training data after
+          iterations of training have occurred
         """
         if not isinstance(iterations, int):
             raise TypeError("iterations must be an integer")
@@ -228,11 +225,7 @@ class DeepNeuralNetwork:
         """
         if filename[-4:] != ".pkl":
             filename = filename + ".pkl"
-
-        # open the file for writing
         with open(filename, 'wb') as f:
-            # writes the object to the
-            # file named 'filename'
             pickle.dump(self, f)
 
     @staticmethod
@@ -243,9 +236,8 @@ class DeepNeuralNetwork:
         Returns: the loaded object, or None if filename doesn’t exist
         """
         try:
-            # open the file for reading (r) in binary (b)
+            # read in binary
             with open(filename, 'rb') as f:
-                # load the object from the file
                 obj = pickle.load(f)
             return obj
         except FileNotFoundError:
