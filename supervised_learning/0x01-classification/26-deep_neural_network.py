@@ -189,11 +189,7 @@ class DeepNeuralNetwork:
         """
         if filename[-4:] != ".pkl":
             filename = filename + ".pkl"
-
-        # open the file for writing
         with open(filename, 'wb') as f:
-            # writes the object to the
-            # file named 'filename'
             pickle.dump(self, f)
 
     @staticmethod
@@ -204,9 +200,8 @@ class DeepNeuralNetwork:
         Returns: the loaded object, or None if filename doesn’t exist
         """
         try:
-            # open the file for reading (r) in binary (b)
+            # read in binary
             with open(filename, 'rb') as f:
-                # load the object from the file
                 obj = pickle.load(f)
             return obj
         except FileNotFoundError:
