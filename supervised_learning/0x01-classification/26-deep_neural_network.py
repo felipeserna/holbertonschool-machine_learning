@@ -144,44 +144,52 @@ class DeepNeuralNetwork:
     def train(self, X, Y, iterations=5000, alpha=0.05,
               verbose=True, graph=True, step=100):
         """
-        Trains the deep neural network by updating __weights and __cache
-        - You are allowed to use one loop
-        - Returns the evaluation of the training data after
-          iterations of training have occurred
+        Trains the neural network
+        :param X: is a numpy.ndarray with shape (nx, m)
+            that contains the input data
+        :param Y: is a numpy.ndarray with shape (1, m)
+            that contains the correct labels for the input data
+        :param iterations: is the number of iterations to train over
+        :param alpha: is the learning rate
+        :param verbose: is a boolean that defines whether or
+            not to print information about the training
+        :param graph: is a boolean that defines whether or
+            not to graph information about the training once
+            the training has completed
+        :param step: visualization step for both verbose and graph
+        :return: the evaluation of the training data after
+            iterations of training have occurred
         """
-        if type(iterations) is not int:
+        if not isinstance(iterations, int):
             raise TypeError("iterations must be an integer")
         if iterations <= 0:
             raise ValueError("iterations must be a positive integer")
-        if type(alpha) is not float:
+        if not isinstance(alpha, float):
             raise TypeError("alpha must be a float")
         if alpha <= 0:
             raise ValueError("alpha must be positive")
         if verbose is True or graph is True:
-            if type(step) is not int:
+            if not isinstance(step, int):
                 raise TypeError("step must be an integer")
             if step <= 0 or step > iterations:
                 raise ValueError("step must be positive and <= iterations")
-        step_list = []
         cost_list = []
-        for i in range(iterations + 1):
+        steps_list = []
+        for i in range(iterations):
             self.forward_prop(X)
-            self.gradient_descent(Y, self.__cache, alpha)
-            cost = self.cost(Y, self.__cache["A{}".format(self.__L)])
-
-            if verbose:
-                if i % step == 0 or step == iterations:
-                    step_list.append(i)
-                    cost_list.append(cost)
+            self.gradient_descent(Y, self.cache, alpha)
+            if i % step == 0 or i == iterations:
+                cost = self.cost(Y, self.__cache['A{}'.format(self.L)])
+                cost_list.append(cost)
+                steps_list.append(i)
+                if verbose is True:
                     print("Cost after {} iterations: {}".format(i, cost))
-
-        if graph:
-            plt.plot(step_list, cost_list)
+        if graph is True:
+            plt.plot(steps_list, cost_list, 'b-')
             plt.xlabel('iteration')
             plt.ylabel('cost')
-            plt.title("Trainig Cost")
+            plt.title('Training Cost')
             plt.show()
-
         return self.evaluate(X, Y)
 
     def save(self, filename):
