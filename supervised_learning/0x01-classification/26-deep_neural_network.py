@@ -185,27 +185,26 @@ class DeepNeuralNetwork:
         return self.evaluate(X, Y)
 
     def save(self, filename):
+        """Saves the instance object to a file in pickle format
+        Args:
+        filename : The file to which the object should be saved
+            If filename does not have the extension .pkl, add it
         """
-        Saves the instance object to a file in pickle format
-        filename is the file to which the object should be saved
-        If filename does not have the extension .pkl, add it
-        """
-        if filename[-4:] != ".pkl":
-            filename = filename + ".pkl"
-        with open(filename, 'wb') as f:
-            pickle.dump(self, f)
+        if filename is not None:
+            if not filename.endswith('.pkl'):
+                filename = filename + '.pkl'
+            with open(filename, 'wb') as f:
+                pickle.dump(self, f)
 
     @staticmethod
     def load(filename):
-        """
-        Loads a pickled DeepNeuralNetwork object
-        filename is the file from which the object should be loaded
+        """Loads a pickled DeepNeuralNetwork object
+        Args:
+        filename : Is the file from which the object should be loaded
         Returns: the loaded object, or None if filename doesn’t exist
         """
         try:
-            # read in binary
             with open(filename, 'rb') as f:
-                obj = pickle.load(f)
-            return obj
+                return (pickle.load(f))
         except FileNotFoundError:
             return None
