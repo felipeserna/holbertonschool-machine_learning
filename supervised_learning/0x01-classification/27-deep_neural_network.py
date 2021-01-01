@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Defines a deep neural network performing binary classification
+Performs multiclass classification
 """
 
 
@@ -10,7 +10,7 @@ import pickle
 
 
 class DeepNeuralNetwork:
-    """Defines a deep neural network performing binary classification"""
+    """Performs multiclass classification"""
     def __init__(self, nx, layers):
         """
         Class constructor
@@ -78,14 +78,23 @@ class DeepNeuralNetwork:
         You are allowed to use one loop
         Returns the output of the neural network and the cache, respectively
         """
-        self.__cache["A0"] = X
+        self.__cache['A0'] = X
+
         for i in range(self.__L):
-            Z = (np.matmul(self.__weights["W{}".format(i+1)],
-                 self.__cache["A{}".format(i)]) +
-                 self.__weights["b{}".format(i+1)])
-            # sigmoid activation function
-            self.__cache["A{}".format(i+1)] = (np.exp(Z)/(np.exp(Z)+1))
-        return (self.__cache["A{}".format(i+1)], self.__cache)
+            W_key = "W{}".format(i + 1)
+            b_key = "b{}".format(i + 1)
+            A_key_prev = "A{}".format(i)
+            A_key_forw = "A{}".format(i + 1)
+
+            Z = np.matmul(self.__weights[W_key], self.__cache[A_key_prev]) \
+                + self.__weights[b_key]
+            if i == self.__L - 1:
+                t = np.exp(Z)
+                self.__cache[A_key_forw] = (t/np.sum(t, axis=0, keepdims=True))
+            else:
+                self.__cache[A_key_forw] = 1 / (1 + np.exp(-Z))
+
+        return self.__cache[A_key_forw], self.__cache
 
     def cost(self, Y, A):
         """
@@ -97,10 +106,7 @@ class DeepNeuralNetwork:
         For avoiding division by zero, use 1.0000001 - A instead of 1 - A
         Returns the cost
         """
-        m = Y.shape[1]
-        cost = (-1/m)*np.sum(np.multiply(Y, np.log(A)) +
-                             np.multiply((1-Y), np.log(1.0000001 - A)))
-        return cost
+        return (-1 / (Y.shape[1])) * np.sum(Y * np.log(A))
 
     def evaluate(self, X, Y):
         """
@@ -112,11 +118,11 @@ class DeepNeuralNetwork:
           * The label values should be 1 if the output of the
             network is >= 0.5 and 0 otherwise
         """
-        A3, _ = self.forward_prop(X)
-        prediction = np.where(A3 >= 0.5, 1, 0)
-        # cost with A3 for avoiding division by zero
-        cost = self.cost(Y, A3)
-        return prediction, cost
+        self.forward_prop(X)[0]
+        key = "A" + str(self.__L)
+        tmp = np.amax(self.__cache[key], axis=0)
+        return (np.where(self.__cache[key] == tmp, 1, 0),
+                self.cost(Y, self.__cache[key]))
 
     def gradient_descent(self, Y, cache, alpha=0.05):
         """
