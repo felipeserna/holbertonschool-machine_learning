@@ -25,11 +25,11 @@ class DeepNeuralNetwork:
             * sig a sigmoid activation
             * tanh a tanh activation
         """
-        if not isinstance(nx, int):
+        if type(nx) is not int:
             raise TypeError("nx must be an integer")
         if nx < 1:
             raise ValueError("nx must be a positive integer")
-        if not isinstance(layers, list):
+        if type(layers) is not list:
             raise TypeError("layers must be a list of positive integers")
         if len(layers) == 0:
             raise TypeError('layers must be a list of positive integers')
@@ -123,8 +123,7 @@ class DeepNeuralNetwork:
           the activated output of the neuron for each example
         Returns the cost
         """
-        m = Y.shape[1]
-        return -(1/m) * np.sum(Y * np.log(A))
+        return -(1/Y.shape[1]) * np.sum(Y * np.log(A))
 
     def evaluate(self, X, Y):
         """
@@ -185,16 +184,16 @@ class DeepNeuralNetwork:
         - Returns the evaluation of the training data after
           iterations of training have occurred
         """
-        if not isinstance(iterations, int):
+        if type(iterations) is not int:
             raise TypeError("iterations must be an integer")
         if iterations <= 0:
             raise ValueError("iterations must be a positive integer")
-        if not isinstance(alpha, float):
+        if type(alpha) is not float:
             raise TypeError("alpha must be a float")
         if alpha <= 0:
             raise ValueError("alpha must be positive")
         if verbose is True or graph is True:
-            if not isinstance(step, int):
+            if type(step) is not int:
                 raise TypeError("step must be an integer")
             if step <= 0 or step > iterations:
                 raise ValueError("step must be positive and <= iterations")
