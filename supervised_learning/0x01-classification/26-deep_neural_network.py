@@ -204,8 +204,9 @@ class DeepNeuralNetwork:
         Returns: the loaded object, or None if filename doesn’t exist
         """
         if filename:
-            fileObject = open(filename, 'r')
+            fileObject = open(filename, 'rb')
             b = pickle.load(fileObject)
+            fileObject.close()
             return b
         else:
             return None
