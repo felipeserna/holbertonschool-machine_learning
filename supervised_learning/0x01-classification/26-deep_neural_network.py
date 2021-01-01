@@ -144,32 +144,21 @@ class DeepNeuralNetwork:
     def train(self, X, Y, iterations=5000, alpha=0.05,
               verbose=True, graph=True, step=100):
         """
-        Trains the neural network
-        :param X: is a numpy.ndarray with shape (nx, m)
-            that contains the input data
-        :param Y: is a numpy.ndarray with shape (1, m)
-            that contains the correct labels for the input data
-        :param iterations: is the number of iterations to train over
-        :param alpha: is the learning rate
-        :param verbose: is a boolean that defines whether or
-            not to print information about the training
-        :param graph: is a boolean that defines whether or
-            not to graph information about the training once
-            the training has completed
-        :param step: visualization step for both verbose and graph
-        :return: the evaluation of the training data after
-            iterations of training have occurred
+        Trains the deep neural network by updating __weights and __cache
+        - You are allowed to use one loop
+        - Returns the evaluation of the training data after
+          iterations of training have occurred
         """
-        if not isinstance(iterations, int):
+        if type(iterations) is not int:
             raise TypeError("iterations must be an integer")
         if iterations <= 0:
             raise ValueError("iterations must be a positive integer")
-        if not isinstance(alpha, float):
+        if type(alpha) is not float:
             raise TypeError("alpha must be a float")
         if alpha <= 0:
             raise ValueError("alpha must be positive")
         if verbose is True or graph is True:
-            if not isinstance(step, int):
+            if type(step) is not int:
                 raise TypeError("step must be an integer")
             if step <= 0 or step > iterations:
                 raise ValueError("step must be positive and <= iterations")
