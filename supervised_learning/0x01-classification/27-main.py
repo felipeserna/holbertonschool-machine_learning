@@ -18,7 +18,7 @@ X_valid = X_valid_3D.reshape((X_valid_3D.shape[0], -1)).T
 Y_train_one_hot = one_hot_encode(Y_train, 10)
 Y_valid_one_hot = one_hot_encode(Y_valid, 10)
 
-deep = Deep.load('../data/27-saved.pkl')
+deep = Deep.load('27-saved.pkl')
 A_one_hot, cost = deep.train(X_train, Y_train_one_hot, iterations=100,
                              step=10, graph=False)
 A = one_hot_decode(A_one_hot)

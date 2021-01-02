@@ -52,7 +52,7 @@ plt.show()
 
 print('\nTanh activaiton:')
 
-deep4 = Deep4.load('../data/4-saved.pkl')
+deep4 = Deep4.load('4-saved.pkl')
 A_one_hot4, cost4 = deep4.train(X_train, Y_train_one_hot, iterations=100,
                                 step=10, graph=False)
 A4 = one_hot_decode(A_one_hot4)
