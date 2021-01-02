@@ -2,7 +2,6 @@
 
 import matplotlib.pyplot as plt
 import numpy as np
-import pickle
 
 Deep = __import__('27-deep_neural_network').DeepNeuralNetwork
 one_hot_encode = __import__('24-one_hot_encode').one_hot_encode
