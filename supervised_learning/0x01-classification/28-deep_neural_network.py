@@ -103,13 +103,19 @@ class DeepNeuralNetwork:
 
             Z = np.matmul(self.__weights[W_key], self.__cache[A_key_prev]) \
                 + self.__weights[b_key]
+            # if it is not the last layer
             if i != self.__L - 1:
+                # sigmoid activation function
                 if self.__activation == 'sig':
                     self.__cache[A_key_forw] = 1 / (1 + np.exp(-Z))
+                # tanh activation function
                 else:
                     self.__cache[A_key_forw] = np.tanh(Z)
+            # if it is the last layer
             else:
+                # t is a temporary variable
                 t = np.exp(Z)
+                # normalize
                 self.__cache[A_key_forw] = (t / np.sum(t,
                                                        axis=0, keepdims=True))
         return self.__cache[A_key_forw], self.__cache
@@ -154,15 +160,19 @@ class DeepNeuralNetwork:
         m = Y.shape[1]
 
         for i in reversed(range(self.__L)):
+            # if it is the last layer
             if i == self.__L - 1:
                 dZ = cache['A{}'.format(i + 1)] - Y
 
+            # hidden layers
             else:
                 dZa = np.matmul(weights['W{}'.format(i + 2)].T, dZ)
                 if self.__activation == 'sig':
+                    # derivative of sigmoid function
                     dZb = (cache['A{}'.format(i + 1)]
                            * (1 - cache['A{}'.format(i + 1)]))
                 else:
+                    # derivative of tanh function
                     dZb = 1 - cache['A{}'.format(i + 1)] ** 2
                 dZ = dZa * dZb
 
