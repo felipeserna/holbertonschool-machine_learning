@@ -88,10 +88,15 @@ class DeepNeuralNetwork:
 
             Z = np.matmul(self.__weights[W_key], self.__cache[A_key_prev]) \
                 + self.__weights[b_key]
+            # if it is the output (last) layer
             if i == self.__L - 1:
+                # softmax activation function for multi-class classification
+                # t is a temporary variable
                 t = np.exp(Z)
+                # normalize
                 self.__cache[A_key_forw] = (t/np.sum(t, axis=0, keepdims=True))
             else:
+                # sigmoid activation function for hidden layers
                 self.__cache[A_key_forw] = 1 / (1 + np.exp(-Z))
 
         return self.__cache[A_key_forw], self.__cache
@@ -99,13 +104,13 @@ class DeepNeuralNetwork:
     def cost(self, Y, A):
         """
         Calculates the cost of the model using logistic regression
-        - Y is a numpy.ndarray with shape (1, m) that contains
-          the correct labels for the input data
-        - A is a numpy.ndarray with shape (1, m) containing
-          the activated output of the neuron for each example
-        For avoiding division by zero, use 1.0000001 - A instead of 1 - A
+        - Y is now a one-hot numpy.ndarray of shape (classes, m)
+        - A is a numpy.ndarray with shape (classes, m) containing
+          the activated output of each neuron in the output layer
+          for each example
         Returns the cost
         """
+        # cost function for softmax activation function
         return (-1 / (Y.shape[1])) * np.sum(Y * np.log(A))
 
     def evaluate(self, X, Y):
@@ -113,10 +118,10 @@ class DeepNeuralNetwork:
         - Evaluates the neural network’s predictions
         - Returns the neuron’s prediction and the cost of the network,
           respectively
-          * The prediction should be a numpy.ndarray with shape (1, m)
+          * The prediction should be a numpy.ndarray with shape (classes, m)
             containing the predicted labels for each example
-          * The label values should be 1 if the output of the
-            network is >= 0.5 and 0 otherwise
+          * The label values should be 1 for the maximum value and zero for
+            the other ones in each example
         """
         self.forward_prop(X)[0]
         key = "A" + str(self.__L)
