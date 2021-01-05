@@ -24,11 +24,11 @@ $ pip install --user tensorflow==1.12
 ## Optimize Tensorflow (Optional)
 
 ## Tasks
-* 0. Placeholders
-* 1. Layers
-* 2. Forward Propagation
-* 3. Accuracy
-* 4. Loss
-* 5. Train_Op
-* 6. Train
-* 7. Evaluate
+0. Placeholders
+1. Layers
+2. Forward Propagation
+3. Accuracy
+4. Loss
+5. Train_Op
+6. Train
+7. Evaluate
