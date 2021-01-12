@@ -76,13 +76,13 @@ def train_mini_batch(X_train, Y_train, X_valid, Y_valid, batch_size=32,
                     X = X_shuffled[start:end]
                     Y = Y_shuffled[start:end]
 
-                    # execute training (from 0 to step) on mini set
+                    # execute training for step
                     sess.run(train_op, feed_dict={x: X, y: Y})
 
                     if step_number != 0 and (step_number + 1) % 100 == 0:
                         print("\tStep {}:".format(step_number + 1))
 
-                        # calculate cost and accuracy for mini set
+                        # calculate cost and accuracy for step
                         step_cost, step_accuracy = sess.run(
                             [loss, accuracy],
                             feed_dict={x: X, y: Y})
