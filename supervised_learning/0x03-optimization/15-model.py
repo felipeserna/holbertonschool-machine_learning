@@ -113,23 +113,20 @@ def forward_prop(x, layer, activations):
 
 def calculate_accuracy(y, y_pred):
     """
-    Calculates the accuracy of a prediction:
-    :param y: placeholder for the labels of the input data
-    :param y_pred: tensor containing the network’s predictions
-    :return: tensor containing the decimal accuracy of the prediction
+    y is a placeholder for the labels of the input data
+    y_pred is a tensor containing the network’s predictions
+    Returns: a tensor containing the decimal accuracy of the prediction
     """
-    # from one y_pred one_hot to tag
-    y_pred_t = tf.argmax(y_pred, 1)
-
-    # from y one_hot to tag
-    y_t = tf.argmax(y, 1)
-
-    # comparison vector between tags (TRUE/FALSE)
-    equal = tf.equal(y_pred_t, y_t)
-
-    # average hits
-    mean = tf.reduce_mean(tf.cast(equal, tf.float32))
-    return mean
+    # decode y and y_pred
+    y_decoded = tf.argmax(y, axis=1)
+    y_pred_decoded = tf.argmax(y_pred, axis=1)
+    # Boolean truth value of (y==y_pred) element-wise
+    equal = tf.equal(y_decoded, y_pred_decoded)
+    # cast to float for decimal accuracy
+    equal = tf.cast(equal, tf.float32)
+    # Mean of elements across dimensions of a tensor
+    accuracy = tf.reduce_mean(equal)
+    return accuracy
 
 
 def calculate_loss(y, y_pred):
