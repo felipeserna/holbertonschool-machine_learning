@@ -7,14 +7,7 @@ import numpy as np
 
 def shuffle_data(X, Y):
     """
-    shuffles the data points in two matrices the same way
-    :param X: first numpy.ndarray of shape (m, nx) to shuffle
-        m is the number of data points
-        nx is the number of features in X
-    :param Y: second numpy.ndarray of shape (m, ny) to shuffle
-        m is the same number of data points as in X
-        ny is the number of features in Y
-    :return: the shuffled X and Y matrices
+    Shuffles the data points in two matrices the same way
     """
     m = X.shape[0]
     shuffle = np.random.permutation(m)
@@ -23,38 +16,38 @@ def shuffle_data(X, Y):
 
 def create_Adam_op(loss, alpha, beta1, beta2, epsilon):
     """
-    creates the training operation for a neural network in tensorflow
-    using the RMSProp optimization algorithm
-    :param loss: loss of the network
-    :param alpha: learning rate
-    :param beta1: weight used for the first moment
-    :param beta2: weight used for the second moment
-    :param epsilon: small number to avoid division by zero
-    :return: Adam optimization operation
+    Creates the training operation for a neural network in tensorflow using
+    the Adam optimization algorithm
+    - loss is the loss of the network
+    - alpha is the learning rate
+    - beta1 is the weight used for the first moment
+    - beta2 is the weight used for the second moment
+    - epsilon is a small number to avoid division by zero
+    - Returns: the Adam optimization operation
     """
-    optimizer = tf.train.AdamOptimizer(learning_rate=alpha, beta1=beta1,
-                                       beta2=beta2, epsilon=epsilon)
-    return optimizer.minimize(loss)
+    train_op = tf.train.AdamOptimizer(alpha,
+                                      beta1,
+                                      beta2,
+                                      epsilon).minimize(loss)
+    return train_op
 
 
 def create_layer(prev, n, activation):
     """
-    create layer function
-    :param prev: tensor output of the previous layer
-    :param n: number of nodes in the layer to create
-    :param activation: activation function that the layer should use
-    :return: tensor output of the layer
+    - prev is the tensor output of the previous layer
+    - n is the number of nodes in the layer to create
+    - activation is the activation function that the layer should use
+    - use tf.contrib.layers.variance_scaling_initializer(mode="FAN_AVG")
+      to implement He et. al initialization for the layer weights
+    - each layer should be given the name layer
+    - Returns: the tensor output of the layer
     """
-    # implement He et. al initialization for the layer weights
-    initializer = \
-        tf.contrib.layers.variance_scaling_initializer(mode="FAN_AVG")
-
-    model = tf.layers.Dense(units=n,
+    w = tf.contrib.layers.variance_scaling_initializer(mode="FAN_AVG")
+    layer = tf.layers.Dense(units=n,
                             activation=activation,
-                            kernel_initializer=initializer,
+                            kernel_initializer=w,
                             name='layer')
-
-    return model(prev)
+    return layer(prev)
 
 
 def create_batch_norm_layer(prev, n, activation):
