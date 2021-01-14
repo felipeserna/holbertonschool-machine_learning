@@ -163,22 +163,23 @@ def model(Data_train, Data_valid, layers, activations, alpha=0.001,
     learning rate decay,
     and batch normalization
     """
-    X_train = Data_train[0]
-    Y_train = Data_train[1]
-    X_valid = Data_valid[0]
-    Y_valid = Data_valid[1]
-
-    steps = X_train.shape[0] / batch_size
+    # getting data_batch
+    steps = Data_train[0].shape[0] / batch_size
     if (steps).is_integer() is True:
         steps = int(steps)
     else:
         steps = int(steps) + 1
 
-    x = tf.placeholder(tf.float32, shape=[None, X_train.shape[1]],
+    X_train = Data_train[0]
+    Y_train = Data_train[1]
+    X_valid = Data_valid[0]
+    Y_valid = Data_valid[1]
+
+    x = tf.placeholder(tf.float32, shape=[None, Data_train[0].shape[1]],
                        name='x')
     tf.add_to_collection('x', x)
 
-    y = tf.placeholder(tf.float32, shape=[None, Y_train.shape[1]],
+    y = tf.placeholder(tf.float32, shape=[None, Data_train[1].shape[1]],
                        name='y')
     tf.add_to_collection('y', y)
 
@@ -218,21 +219,22 @@ def model(Data_train, Data_valid, layers, activations, alpha=0.001,
                 [loss, accuracy],
                 feed_dict={x: X_valid, y: Y_valid})
 
+            # where {epoch} is the current epoch
             print("After {} epochs:".format(epoch))
 
-            # train_cost is the cost of the model
+            # where {train_cost} is the cost of the model
             # on the entire training set
             print("\tTraining Cost: {}".format(train_cost))
 
-            # train_accuracy is the accuracy of the model
+            # where {train_accuracy} is the accuracy of the model
             # on the entire training set
             print("\tTraining Accuracy: {}".format(train_accuracy))
 
-            # valid_cost is the cost of the model
+            # where {valid_cost} is the cost of the model
             # on the entire validation set
             print("\tValidation Cost: {}".format(valid_cost))
 
-            # valid_accuracy is the accuracy of the model
+            # where {valid_accuracy} is the accuracy of the model
             # on the entire validation set
             print("\tValidation Accuracy: {}".format(valid_accuracy))
 
@@ -245,37 +247,37 @@ def model(Data_train, Data_valid, layers, activations, alpha=0.001,
                 # shuffle data, both training set and labels
                 X_shuffled, Y_shuffled = shuffle_data(X_train, Y_train)
 
-                # mini-batch within epoch
+                # iteration within epoch
                 for step_number in range(steps):
 
                     # data selection mini batch from training set and labels
                     start = step_number * batch_size
 
                     end = (step_number + 1) * batch_size
-                    if end > X_train.shape[0]:
-                        end = X_train.shape[0]
+                    if end > Data_train[0].shape[0]:
+                        end = Data_train[0].shape[0]
 
                     X = X_shuffled[start:end]
                     Y = Y_shuffled[start:end]
 
-                    # execute training for step
+                    # execute training (from 0 to iteration) on mini set
                     sess.run(train_op, feed_dict={x: X, y: Y})
 
                     if step_number != 0 and (step_number + 1) % 100 == 0:
-                        # step_number is the number of times gradient
+                        # where {step_number} is the number of times gradient
                         # descent has been run in the current epoch
                         print("\tStep {}:".format(step_number + 1))
 
-                        # calculate cost and accuracy for step
+                        # calculate cost and accuracy for mini set
                         step_cost, step_accuracy = sess.run(
                             [loss, accuracy],
                             feed_dict={x: X, y: Y})
 
-                        # step_cost is the cost of the model
+                        # where {step_cost} is the cost of the model
                         # on the current mini-batch
                         print("\t\tCost: {}".format(step_cost))
 
-                        # step_accuracy is the accuracy of the model
+                        # where {step_accuracy} is the accuracy of the model
                         # on the current mini-batch
                         print("\t\tAccuracy: {}".format(step_accuracy))
 
