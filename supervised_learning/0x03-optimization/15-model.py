@@ -64,6 +64,9 @@ def create_batch_norm_layer(prev, n, activation):
     - you should use an epsilon of 1e-8
     - Returns: a tensor of the activated output for the layer
     """
+    if activation is None:
+        A = create_layer(prev, n, activation)
+        return A
     # He et al. initialization for the layer weights
     kernal_init = tf.contrib.layers.\
         variance_scaling_initializer(mode="FAN_AVG")
