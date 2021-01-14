@@ -131,12 +131,12 @@ def calculate_accuracy(y, y_pred):
 
 def calculate_loss(y, y_pred):
     """
-    Calculates the softmax cross-entropy loss of a prediction
-    :param y: placeholder for the labels of the input data
-    :param y_pred: tensor containing the network’s predictions
-    :return: tensor containing the loss of the prediction
+    y is a placeholder for the labels of the input data
+    y_pred is a tensor containing the network’s predictions
+    Returns: a tensor containing the loss of the prediction
     """
-    return tf.losses.softmax_cross_entropy(y, y_pred)
+    loss = tf.losses.softmax_cross_entropy(y, y_pred)
+    return loss
 
 
 def learning_rate_decay(alpha, decay_rate, global_step, decay_step):
