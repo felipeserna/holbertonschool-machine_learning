@@ -92,18 +92,18 @@ def create_batch_norm_layer(prev, n, activation):
 
 def forward_prop(x, layer, activations):
     """
-    creates the forward propagation graph for the neural network
-    :param x: placeholder for the input data
-    :param layer: list containing the number of nodes in
-        each layer of the network
-    :param activations: list containing the activation functions
-        for each layer of the network
-    :return: prediction of the network in tensor form
+    Creates the forward propagation graph for the neural network
+    - x is the placeholder for the input data
+    - layer is a list containing the number of nodes in
+      each layer of the network
+    - activations is a list containing the activation functions
+      for each layer of the network
+    Returns: prediction of the network in tensor form
     """
-    # first layer activation with features x as input
+    # first layer activation with x features as input
     y_pred = create_batch_norm_layer(x, layer[0], activations[0])
 
-    # successive layers activations with y_pred from the prev layer as input
+    # next layers activations with y_pred from the prev layer as input
     for i in range(1, len(layer)):
         y_pred = create_batch_norm_layer(y_pred, layer[i],
                                          activations[i])
