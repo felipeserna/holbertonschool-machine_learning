@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
-"""
-Put it all together and what do you get?
-"""
-
+"""Contains the model function"""
 
 import tensorflow as tf
 import numpy as np
@@ -10,7 +7,14 @@ import numpy as np
 
 def shuffle_data(X, Y):
     """
-    Shuffles the data points in two matrices the same way
+    shuffles the data points in two matrices the same way
+    :param X: first numpy.ndarray of shape (m, nx) to shuffle
+        m is the number of data points
+        nx is the number of features in X
+    :param Y: second numpy.ndarray of shape (m, ny) to shuffle
+        m is the same number of data points as in X
+        ny is the number of features in Y
+    :return: the shuffled X and Y matrices
     """
     m = X.shape[0]
     shuffle = np.random.permutation(m)
@@ -19,149 +23,178 @@ def shuffle_data(X, Y):
 
 def create_Adam_op(loss, alpha, beta1, beta2, epsilon):
     """
-    Creates the training operation for a neural network in tensorflow using
-    the Adam optimization algorithm
-    - loss is the loss of the network
-    - alpha is the learning rate
-    - beta1 is the weight used for the first moment
-    - beta2 is the weight used for the second moment
-    - epsilon is a small number to avoid division by zero
-    - Returns: the Adam optimization operation
+    creates the training operation for a neural network in tensorflow
+    using the RMSProp optimization algorithm
+    :param loss: loss of the network
+    :param alpha: learning rate
+    :param beta1: weight used for the first moment
+    :param beta2: weight used for the second moment
+    :param epsilon: small number to avoid division by zero
+    :return: Adam optimization operation
     """
-    train_op = tf.train.AdamOptimizer(alpha,
-                                      beta1,
-                                      beta2,
-                                      epsilon).minimize(loss)
-    return train_op
+    optimizer = tf.train.AdamOptimizer(learning_rate=alpha, beta1=beta1,
+                                       beta2=beta2, epsilon=epsilon)
+    return optimizer.minimize(loss)
 
 
 def create_layer(prev, n, activation):
     """
-    - prev is the tensor output of the previous layer
-    - n is the number of nodes in the layer to create
-    - activation is the activation function that the layer should use
-    - use tf.contrib.layers.variance_scaling_initializer(mode="FAN_AVG")
-      to implement He et. al initialization for the layer weights
-    - each layer should be given the name layer
-    - Returns: the tensor output of the layer
+    create layer function
+    :param prev: tensor output of the previous layer
+    :param n: number of nodes in the layer to create
+    :param activation: activation function that the layer should use
+    :return: tensor output of the layer
     """
-    w = tf.contrib.layers.variance_scaling_initializer(mode="FAN_AVG")
-    layer = tf.layers.Dense(units=n,
+    # implement He et. al initialization for the layer weights
+    initializer = \
+        tf.contrib.layers.variance_scaling_initializer(mode="FAN_AVG")
+
+    model = tf.layers.Dense(units=n,
                             activation=activation,
-                            kernel_initializer=w,
+                            kernel_initializer=initializer,
                             name='layer')
-    return layer(prev)
+
+    return model(prev)
 
 
 def create_batch_norm_layer(prev, n, activation):
     """
-    - prev is the activated output of the previous layer
-    - n is the number of nodes in the layer to be created
-    - activation is the activation function that should be used
-      on the output of the layer
-    - you should use the tf.layers.Dense layer as the base layer with
-      kernal initializer
-      tf.contrib.layers.variance_scaling_initializer(mode="FAN_AVG")
-    - your layer should incorporate two trainable parameters, gamma and beta,
-      initialized as vectors of 1 and 0 respectively
-    - you should use an epsilon of 1e-8
-    - Returns: a tensor of the activated output for the layer
+    creates a batch normalization layer for a neural network in tensorflow
+    :param prev: activated output of the previous layer
+    :param n: number of nodes in the layer to be created
+    :param activation: activation function that should be used on
+    the output of the layer
+    :return:  tensor of the activated output for the layer
     """
-    # He et al. initialization for the layer weights
-    kernal_init = tf.contrib.layers.\
-        variance_scaling_initializer(mode="FAN_AVG")
+    if activation is None:
+        A = create_layer(prev, n, activation)
+        return A
 
-    base_layer = tf.layers.Dense(units=n, kernel_initializer=kernal_init,
-                                 name='base_layer')
-    X = base_layer(prev)
-    # Calculate the mean and variance of X
-    mu, var = tf.nn.moments(X, axes=[0])
-    gamma = tf.Variable(tf.constant(1.0, shape=(1, n)), trainable=True,
-                        name='gamma')
-    beta = tf.Variable(tf.constant(0.0, shape=(1, n)), trainable=True,
-                       name='beta')
-    # returns the normalized, scaled, offset tensor
-    Z = tf.nn.batch_normalization(x=X, mean=mu, variance=var,
-                                  offset=beta, scale=gamma,
-                                  variance_epsilon=1e-8,
-                                  name='Z')
-    # activation function
-    A = activation(Z)
+    # implement He et. al initialization for the layer weights
+    initializer = \
+        tf.contrib.layers.variance_scaling_initializer(mode="FAN_AVG")
+
+    # dense layer model
+    model = tf.layers.Dense(units=n,
+                            kernel_initializer=initializer)
+    Z = model(prev)
+
+    # incorporation of trainable parameters beta and gamma
+    # for scale and offset
+    gamma = tf.Variable(tf.constant(1.0, shape=[n]),
+                        name='gamma', trainable=True)
+    beta = tf.Variable(tf.constant(0.0, shape=[n]),
+                       name='beta', trainable=True)
+    epsilon = tf.constant(1e-8)
+
+    # normalization parameter calculation
+    mean, variance = tf.nn.moments(Z, axes=0)
+
+    # Normalization over result after activation (with mean and variance)
+    # and later adjusting with beta and gamma for
+    # offset and scale respectively
+    adjusted = tf.nn.batch_normalization(x=Z, mean=mean, variance=variance,
+                                         offset=beta, scale=gamma,
+                                         variance_epsilon=epsilon)
+
+    A = activation(adjusted)
     return A
 
 
-def forward_prop(x, layer_sizes=[], activations=[]):
+def forward_prop(x, layer, activations):
     """
-    - x is the placeholder for the input data
-    - layer_sizes is a list containing the number of nodes
-      in each layer of the network
-    - activations is a list containing the activation functions
-      for each layer of the network
-    - Returns: the prediction of the network in tensor form
+    creates the forward propagation graph for the neural network
+    :param x: placeholder for the input data
+    :param layer: list containing the number of nodes in
+        each layer of the network
+    :param activations: list containing the activation functions
+        for each layer of the network
+    :return: prediction of the network in tensor form
     """
-    A = x
-    for i in range(len(layer_sizes)):
-        A = create_layer(A, layer_sizes[i], activations[i])
-    return A
+    # first layer activation with features x as input
+    y_pred = create_batch_norm_layer(x, layer[0], activations[0])
+
+    # successive layers activations with y_pred from the prev layer as input
+    for i in range(1, len(layer)):
+        y_pred = create_batch_norm_layer(y_pred, layer[i],
+                                         activations[i])
+
+    return y_pred
 
 
 def calculate_accuracy(y, y_pred):
     """
-    y is a placeholder for the labels of the input data
-    y_pred is a tensor containing the network’s predictions
-    Returns: a tensor containing the decimal accuracy of the prediction
+    Calculates the accuracy of a prediction:
+    :param y: placeholder for the labels of the input data
+    :param y_pred: tensor containing the network’s predictions
+    :return: tensor containing the decimal accuracy of the prediction
     """
-    # decode y and y_pred
-    y_decoded = tf.argmax(y, axis=1)
-    y_pred_decoded = tf.argmax(y_pred, axis=1)
-    # Boolean truth value of (y==y_pred) element-wise
-    equal = tf.equal(y_decoded, y_pred_decoded)
-    # cast to float for decimal accuracy
-    equal = tf.cast(equal, tf.float32)
-    # Mean of elements across dimensions of a tensor
-    accuracy = tf.reduce_mean(equal)
-    return accuracy
+    # from one y_pred one_hot to tag
+    y_pred_t = tf.argmax(y_pred, 1)
+
+    # from y one_hot to tag
+    y_t = tf.argmax(y, 1)
+
+    # comparison vector between tags (TRUE/FALSE)
+    equal = tf.equal(y_pred_t, y_t)
+
+    # average hits
+    mean = tf.reduce_mean(tf.cast(equal, tf.float32))
+    return mean
 
 
 def calculate_loss(y, y_pred):
     """
-    y is a placeholder for the labels of the input data
-    y_pred is a tensor containing the network’s predictions
-    Returns: a tensor containing the loss of the prediction
+    Calculates the softmax cross-entropy loss of a prediction
+    :param y: placeholder for the labels of the input data
+    :param y_pred: tensor containing the network’s predictions
+    :return: tensor containing the loss of the prediction
     """
-    loss = tf.losses.softmax_cross_entropy(y, y_pred)
-    return loss
+    return tf.losses.softmax_cross_entropy(y, y_pred)
 
 
 def learning_rate_decay(alpha, decay_rate, global_step, decay_step):
     """
-    - alpha is the original learning rate
-    - decay_rate is the weight used to determine the rate
-      at which alpha will decay
-    - global_step is the number of passes of gradient descent
-      that have elapsed
-    - decay_step is the number of passes of gradient descent
-      that should occur before alpha is decayed further
-    - the learning rate decay should occur in a stepwise fashion
-    - Returns: the learning rate decay operation
+    creates a learning rate decay operation in tensorflow using
+        inverse time decay:
+    :param alpha: the original learning rate
+    :param decay_rate: weight used to determine the rate at
+        which alpha will decay
+    :param global_step: number of passes of gradient descent that have elapsed
+    :param decay_step: number of passes of gradient descent that should occur
+        before alpha is decayed further
+    :return: learning rate decay operation
     """
-    learning_rate = tf.train.inverse_time_decay(alpha,
-                                                global_step,
-                                                decay_step,
-                                                decay_rate,
-                                                staircase=True)
-    return learning_rate
+    return tf.train.inverse_time_decay(learning_rate=alpha,
+                                       global_step=global_step,
+                                       decay_steps=decay_step,
+                                       decay_rate=decay_rate,
+                                       staircase=True)
 
 
-def model(Data_train, Data_valid, layers, activations, alpha=0.001,
-          beta1=0.9, beta2=0.999, epsilon=1e-8, decay_rate=1,
-          batch_size=32, epochs=5, save_path='/tmp/model.ckpt'):
+def model(Data_train, Data_valid, layers, activations, alpha=0.001, beta1=0.9,
+          beta2=0.999, epsilon=1e-8, decay_rate=1, batch_size=32,
+          epochs=5, save_path='/tmp/model.ckpt'):
     """
-    Builds, trains, and saves a neural network model in tensorflow using
-    Adam optimization,
-    mini-batch gradient descent,
-    learning rate decay,
-    and batch normalization
+    Data_train is a tuple containing the training inputs and
+               training labels, respectively
+    Data_valid is a tuple containing the validation inputs and
+               validation labels, respectively
+    layers is a list containing the number of nodes in each
+               layer of the network
+    activation is a list containing the activation functions
+               used for each layer of the network
+    alpha is the learning rate
+    beta1 is the weight for the first moment of Adam Optimization
+    beta2 is the weight for the second moment of Adam Optimization
+    epsilon is a small number used to avoid division by zero
+    decay_rate is the decay rate for inverse time decay of
+               the learning rate (the corresponding decay step should be 1)
+    batch_size is the number of data points that should be in a mini-batch
+    epochs is the number of times the training should pass
+               through the whole dataset
+    save_path is the path where the model should be saved to
+    Returns: the path where the model was saved
     """
     # getting data_batch
     steps = Data_train[0].shape[0] / batch_size
