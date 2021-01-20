@@ -28,7 +28,10 @@ def dropout_forward_prop(X, weights, L, keep_prob):
             # tanh activation function
             cache[A_key_forw] = np.tanh(Z)
             # dropout mask in layer
-            cache[D_key] = np.random.rand(cache[A_key_forw].shape[0], cache[A_key_forw].shape[1]) < keep_prob
+            cache[D_key] = \
+                np.random.rand(
+                    cache[A_key_forw].shape[0],
+                    cache[A_key_forw].shape[1]) < keep_prob
             cache[A_key_forw] *= cache[D_key]
             cache[A_key_forw] /= keep_prob
         # if it is the last layer
