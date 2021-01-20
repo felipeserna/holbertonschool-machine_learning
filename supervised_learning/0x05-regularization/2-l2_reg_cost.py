@@ -15,5 +15,4 @@ def l2_reg_cost(cost):
     for L2 regularization
     """
     l2_cost = tf.losses.get_regularization_losses()
-    new_cost = cost + l2_cost
-    return new_cost
+    return cost + l2_cost
