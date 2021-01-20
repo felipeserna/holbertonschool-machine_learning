@@ -27,14 +27,14 @@ def l2_reg_gradient_descent(Y, weights, cache, alpha, lambtha, L):
             dZb = 1 - cache['A{}'.format(i + 1)] ** 2
             dZ = dZa * dZb
 
-            dW = ((np.matmul(dZ, cache['A{}'.format(i)].T)) / m) + \
-                (lambtha / m) * weights['W{}'.format(i + 1)]
-            db = (np.sum(dZ, axis=1, keepdims=True) / m) + \
-                (lambtha / m) * weights['b{}'.format(i + 1)]
+        dW = ((np.matmul(dZ, cache['A{}'.format(i)].T)) / m) + \
+            (lambtha / m) * weights['W{}'.format(i + 1)]
+        db = (np.sum(dZ, axis=1, keepdims=True) / m) + \
+            (lambtha / m) * weights['b{}'.format(i + 1)]
 
-            weights['W{}'.format(i + 1)] = \
-                weights['W{}'.format(i + 1)] \
-                - (alpha * dW)
-            weights['b{}'.format(i + 1)] = \
-                weights['b{}'.format(i + 1)] \
-                - (alpha * db)
+        weights['W{}'.format(i + 1)] = \
+            weights['W{}'.format(i + 1)] \
+            - (alpha * dW)
+        weights['b{}'.format(i + 1)] = \
+            weights['b{}'.format(i + 1)] \
+            - (alpha * db)
