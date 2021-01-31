@@ -12,7 +12,7 @@ def convolve(images, kernels, padding='same', stride=(1, 1)):
     Returns: a numpy.ndarray containing the convolved images
     """
     input_w, input_h, m = images.shape[2], images.shape[1], images.shape[0]
-    nc, kw, kh = kernels.shape[2], kernels.shape[1], kernels.shape[0]
+    nc, kw, kh = kernels.shape[3], kernels.shape[1], kernels.shape[0]
     sw, sh = stride[1], stride[0]
 
     if padding == 'same':
