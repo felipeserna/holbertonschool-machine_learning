@@ -4,7 +4,7 @@ Converts a label vector into a one-hot matrix
 """
 
 
-import tensorflow.keras as K
+from tensorflow import keras as K
 
 
 def one_hot(labels, classes=None):
