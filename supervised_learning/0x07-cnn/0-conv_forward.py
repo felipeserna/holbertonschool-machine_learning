@@ -38,15 +38,17 @@ def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
     h_new = int(((h_prev - kh + 2 * ph) / sh) + 1)
     w_new = int(((w_prev - kw + 2 * pw) / sw) + 1)
 
-    A_new = np.zeros((m, h_new, w_new, c_new))
+    convolved = np.zeros((m, h_new, w_new, c_new))
 
     for x in range(w_new):
         for y in range(h_new):
             for z in range(c_new):
-                A_new[:, y, x, z] = \
+                convolved[:, y, x, z] = \
                     (W[:, :, :, z] * images_padded[:,
                      y * sh: y * sh + kh,
                      x * sw: x * sw + kw,
                      :]).sum(axis=(1, 2, 3))
+
+    A_new = activation(convolved + b)
 
     return A_new
