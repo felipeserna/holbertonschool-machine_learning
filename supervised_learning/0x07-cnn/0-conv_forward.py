@@ -11,64 +11,44 @@ def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
     """
     Returns: the output of the convolutional layer
     """
-    # Retrieving dimensions from A_prev shape
-    (m, h_prev, w_prev, c_prev) = A_prev.shape
+    m = A_prev.shape[0]
+    h_prev = A_prev.shape[1]
+    w_prev = A_prev.shape[2]
 
-    # Retrieving dimensions from W's shape
-    (kh, kw, c_prev, c_new) = W.shape
+    kh = W.shape[0]
+    kw = W.shape[1]
+    c_new = W.shape[3]
 
-    # Retrieving stride
-    (sh, sw) = stride
+    sh = stride[0]
+    sw = stride[1]
 
-    # Setting padding for valid
-    pw, ph = 0, 0
-
-    # Compute the output dimensions
-    n_h = int(((h_prev + 2 * ph - kh) / sh) + 1)
-    n_w = int(((w_prev + 2 * pw - kw) / sw) + 1)
-
-    # Setting padding for same
     if padding == 'same':
-        if kh % 2 == 0:
-            ph = int((h_prev * sh + kh - h_prev) / 2)
-            n_h = int(((h_prev + 2 * ph - kh) / sh))
-        else:
-            ph = int(((h_prev - 1) * sh + kh - h_prev) / 2)
-            n_h = int(((h_prev + 2 * ph - kh) / sh) + 1)
+        ph = int(((h_prev - 1) * sh + kh - h_prev) / 2) + 1
+        pw = int(((w_prev - 1) * sw + kw - w_prev) / 2) + 1
+    if padding == 'valid':
+        ph = 0
+        pw = 0
 
-        if kw % 2 == 0:
-            pw = int((w_prev * sw + kw - w_prev) / 2)
-            n_w = int(((w_prev + 2 * pw - kw) / sw))
-        else:
-            pw = int(((w_prev - 1) * sw + kw - w_prev) / 2)
-            n_w = int(((w_prev + 2 * pw - kw) / sw) + 1)
+    pad_size = ((0, 0), (ph, ph), (pw, pw), (0, 0))
+    images_padded = np.pad(A_prev,
+                           pad_width=pad_size,
+                           mode='constant',
+                           constant_values=0)
 
-    # pad images
-    images = np.pad(A_prev,
-                    pad_width=((0, 0),
-                               (ph, ph),
-                               (pw, pw),
-                               (0, 0)),
-                    mode='constant', constant_values=0)
+    h_new = int(((h_prev - kh + 2 * ph) / sh) + 1)
+    w_new = int(((w_prev - kw + 2 * pw) / sw) + 1)
 
-    # Initialize the output with zeros
-    output = np.zeros((m, n_h, n_w, c_new))
+    convolved = np.zeros((m, h_new, w_new, c_new))
 
-    # Looping over vertical(h) and horizontal(w) axis of output volume
-    for y in range(n_h):
-        for x in range(n_w):
-            # over every channel
-            for v in range(c_new):
-                # element-wise multiplication of the kernel and the image
-                output[:, y, x, v] = \
-                    (W[:, :, :, v] *
-                     images[:,
+    for y in range(h_new):
+        for x in range(w_new):
+            for z in range(c_new):
+                convolved[:, y, x, z] = \
+                    (W[:, :, :, z] * images_padded[:,
                      y * sh: y * sh + kh,
                      x * sw: x * sw + kw,
                      :]).sum(axis=(1, 2, 3))
 
-                output[:, y, x, v] = \
-                    (activation(output[:, y, x, v] +
-                                b[0, 0, 0, v]))
+    A_new = activation(convolved + b)
 
-    return output
+    return A_new
