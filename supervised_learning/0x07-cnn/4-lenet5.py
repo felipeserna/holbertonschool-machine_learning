@@ -37,12 +37,12 @@ def lenet5(x, y):
                              kernel_initializer=init)(flat)
     layer6 = tf.layers.Dense(units=84, activation=relu,
                              kernel_initializer=init)(layer5)
-    y_pred = tf.layers.Dense(units=10, kernel_initializer=init)(layer6)
+    output_layer = tf.layers.Dense(units=10, kernel_initializer=init)(layer6)
 
-    y_pred = tf.nn.softmax(y_pred)
+    y_pred = tf.nn.softmax(output_layer)
 
     # error
-    loss = tf.losses.softmax_cross_entropy(y, y_pred)
+    loss = tf.losses.softmax_cross_entropy(y, logits=output_layer)
     grady = tf.train.AdamOptimizer()
     op = grady.minimize(loss)
     acc = tf.equal(tf.argmax(y, 1), tf.argmax(y_pred, 1))
