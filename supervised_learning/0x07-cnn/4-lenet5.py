@@ -33,11 +33,11 @@ def lenet5(x, y):
                               kernel_initializer=init)(layer2)
     layer4 = tf.layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2))(layer3)
     flat = tf.layers.Flatten()(layer4)
-    layer5 = tf.layers.Dense(120, activation=relu,
+    layer5 = tf.layers.Dense(units=120, activation=relu,
                              kernel_initializer=init)(flat)
-    layer6 = tf.layers.Dense(84, activation=relu,
+    layer6 = tf.layers.Dense(units=84, activation=relu,
                              kernel_initializer=init)(layer5)
-    y_pred = tf.layers.Dense(10, kernel_initializer=init)(layer6)
+    y_pred = tf.layers.Dense(units=10, kernel_initializer=init)(layer6)
 
     y_pred = tf.nn.softmax(y_pred)
     loss = tf.losses.softmax_cross_entropy(y, y_pred)
