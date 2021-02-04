@@ -22,19 +22,20 @@ def lenet5(x, y):
             a tensor for the loss of the netowrk
             a tensor for the accuracy of the network
     """
+    relu = tf.nn.relu
     init = tf.contrib.layers.variance_scaling_initializer()
     layer1 = tf.layers.Conv2D(filters=6, kernel_size=(5, 5),
-                              padding='same', activation='relu',
+                              padding='same', activation=relu,
                               kernel_initializer=init)(x)
     layer2 = tf.layers.MaxPooling2D((2, 2), strides=(2, 2))(layer1)
     layer3 = tf.layers.Conv2D(filters=16, kernel_size=(5, 5),
-                              padding='valid', activation='relu',
+                              padding='valid', activation=relu,
                               kernel_initializer=init)(layer2)
     layer4 = tf.layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2))(layer3)
     flat = tf.layers.Flatten()(layer4)
-    layer5 = tf.layers.Dense(120, activation='relu',
+    layer5 = tf.layers.Dense(120, activation=relu,
                              kernel_initializer=init)(flat)
-    layer6 = tf.layers.Dense(84, activation='relu',
+    layer6 = tf.layers.Dense(84, activation=relu,
                              kernel_initializer=init)(layer5)
     y_pred = tf.layers.Dense(10, kernel_initializer=init)(layer6)
 
