@@ -41,7 +41,7 @@ def inception_block(A_prev, filters):
                                 activation='relu',
                                 kernel_initializer='he_normal')(max_pooling2d)
 
-    concatenate = K.layers.Concatenate([F1_layer,
+    concatenate = K.layers.concatenate([F1_layer,
                                         F3_layer,
                                         F5_layer,
                                         FPP_layer])
