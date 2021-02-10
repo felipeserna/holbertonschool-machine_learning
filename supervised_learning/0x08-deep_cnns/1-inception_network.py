@@ -70,7 +70,6 @@ def inception_network():
                                    filters=(384, 192, 384, 48, 128, 128))
 
     avg_pool = K.layers.AveragePooling2D(pool_size=7,
-                                         strides=1,
                                          padding='same')(inception_5b)
     dropout = K.layers.Dropout(rate=0.4)(avg_pool)
 
