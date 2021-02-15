@@ -12,7 +12,7 @@
 Write a python script that trains a convolutional neural network to classify
 the CIFAR 10 dataset.
 
-In the same file, write a function def preprocess_data(X, Y): that pre-processes the data for your model
+In the same file, write a function def preprocess_data(X, Y): that pre-processes the data for your model.
 
 **1. "Research is what I'm doing when I don't know what I'm doing."**
     - Wernher von Braun
