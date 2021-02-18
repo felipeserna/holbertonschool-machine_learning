@@ -9,6 +9,7 @@ that pre-processes the data for your model
 
 import tensorflow.keras as K
 
+
 def preprocess_data(X, Y):
     """
     Returns: X_p, Y_p
@@ -20,18 +21,18 @@ def preprocess_data(X, Y):
 
     return X_p, Y_p
 
+
 if __name__ == "__main__":
     # Dataset of 50,000 32x32 color training images and 10,000 test images,
     # labeled over 10 categories
     (x_train, y_train), (X, Y) = K.datasets.cifar10.load_data()
-    
+
     # preprocessing
     x_train_p, y_train_p = preprocess_data(x_train, y_train)
-    x_test_p, y_test_p = preprocess_data(X, Y)    
-    
+    x_test_p, y_test_p = preprocess_data(X, Y)
+
     input = K.Input(shape=(32, 32, 3))
     input = K.layers.UpSampling2D()(input)
-
 
     # DenseNet121
     #  loads weights pre-trained on ImageNet
@@ -40,10 +41,13 @@ if __name__ == "__main__":
                                            input_tensor=input,
                                            input_shape=None,
                                            pooling='max')
-    
+
     output = dense_121.layers[-1].output
     output = K.layers.Flatten()(output)
     output = K.layers.Dense(512, activation='relu')(output)
+    output = K.layers.Dropout(0.2)(output)
+    output = K.layers.Dense(256, activation='relu')(output)
+    output = K.layers.Dropout(0.2)(output)
     output = K.layers.Dense(10, activation='softmax')(output)
 
     model = K.models.Model(dense_121.input, output)
@@ -53,16 +57,8 @@ if __name__ == "__main__":
 
     # training
     history = model.fit(x=x_train_p, y=y_train_p,
-                        batch_size=32, epochs=5,
+                        batch_size=256, epochs=20,
                         validation_data=(x_test_p, y_test_p),
-                        verbose=1)    
+                        verbose=1)
 
     model.save('cifar10.h5')
-
-# to fix issue with saving keras applications
-K.learning_phase = K.backend.learning_phase 
-
-_, (X, Y) = K.datasets.cifar10.load_data()
-X_p, Y_p = preprocess_data(X, Y)
-model = K.models.load_model('cifar10.h5')
-model.evaluate(X_p, Y_p, batch_size=128, verbose=1)
