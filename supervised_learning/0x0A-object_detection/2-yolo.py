@@ -120,7 +120,7 @@ class Yolo:
     def filter_boxes(self, boxes, box_confidences, box_class_probs):
         """
         Returns a tuple of (filtered_boxes, box_classes, box_scores)
-        """        
+        """
         box_scores_full = []
         for box_conf, box_class_prob in zip(box_confidences, box_class_probs):
             box_scores_full.append(box_conf * box_class_prob)
