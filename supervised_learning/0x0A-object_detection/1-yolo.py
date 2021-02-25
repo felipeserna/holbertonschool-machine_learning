@@ -43,14 +43,14 @@ class Yolo:
         box_class_probs = []
 
         for output in outputs:
-            # Create the list with np.ndarray
+            # list with processed boundary boxes for each output
             boxes.append(output[..., 0:4])
-            # Calculate confidences for each output
+            # list with box confidences for each output
             box_confidences.append(self.sigmoid(output[..., 4, np.newaxis]))
-            # Calculate class probability for each output
+            # list with box's class probabilities for each output
             box_class_probs.append(self.sigmoid(output[..., 5:]))
 
-        for i, box in enumerate(boxes):
+        for count, box in enumerate(boxes):
             grid_height, grid_width, anchor_boxes, _ = box.shape
 
             c = np.zeros((grid_height, grid_width, anchor_boxes), dtype=int)
@@ -90,8 +90,8 @@ class Yolo:
             by /= grid_height
 
             # priors (anchors) width and height
-            pw = self.anchors[i, :, 0]
-            ph = self.anchors[i, :, 1]
+            pw = self.anchors[count, :, 0]
+            ph = self.anchors[count, :, 1]
 
             # scale to anchors box dimensions
             bw = pw * np.exp(t_w)
@@ -103,7 +103,7 @@ class Yolo:
             bw /= input_width
             bh /= input_height
 
-            # Corner of bounding box
+            # Corners of bounding box
             x1 = bx - bw / 2
             y1 = by - bh / 2
             x2 = x1 + bw
