@@ -4,6 +4,10 @@ Create a class NST that performs tasks for neural style transfer
 """
 
 
+import numpy as np
+import tensorflow as tf
+
+
 class NST:
     """
     Performs tasks for neural style transfer
