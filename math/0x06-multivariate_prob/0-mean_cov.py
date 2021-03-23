@@ -11,8 +11,8 @@ def mean_cov(X):
     """
     Returns: mean, cov
     """
-    n = len(X)
-    d = len(X[0])
+    n = X.shape[0]
+    d = X.shape[1]
 
     if type(X) is not np.ndarray or len(X.shape) != 2:
         raise TypeError("X must be a 2D numpy.ndarray")
@@ -22,6 +22,8 @@ def mean_cov(X):
 
     mean = np.mean(X, axis=0).reshape(1, d)
 
-    cov = np.matmul((X - mean).T, (X - mean)) / (n - 1)
+    deviation = X - mean
+
+    cov = np.matmul(deviation.T, deviation) / (n - 1)
 
     return mean, cov
