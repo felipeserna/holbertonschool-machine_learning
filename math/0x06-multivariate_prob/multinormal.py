@@ -37,10 +37,15 @@ class MultiNormal:
         if type(x) is not np.ndarray:
             raise TypeError("x must be a numpy.ndarray")
 
-        d = x.shape[0]
+        d = self.cov.shape[0]
 
-        if len(x.shape) != 2 or x.shape != (d, 1):
-            raise ValueError("x must have the shape ({d}, 1)")
+        if len(x.shape) != 2:
+            raise ValueError('x must have the shape ({}, 1)'.format(d))
+
+        if x.shape[1] != 1 or x.shape[0] != d:
+            raise ValueError('x must have the shape ({}, 1)'.format(d))
+
+        n = x.shape[0]
 
         mean = self.mean
         cov = self.cov
@@ -48,7 +53,7 @@ class MultiNormal:
         cov_inv = np.linalg.inv(cov)
 
         # denominator
-        den = np.sqrt(((2 * np.pi) ** d) * cov_det)
+        den = np.sqrt(((2 * np.pi) ** n) * cov_det)
 
         # exponential term
         expo = -0.5 * np.matmul(np.matmul((x - mean).T, cov_inv), x - mean)
