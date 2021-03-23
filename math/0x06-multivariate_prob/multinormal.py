@@ -28,3 +28,31 @@ class MultiNormal:
         deviation = data - self.mean
 
         self.cov = np.matmul(deviation, deviation.T) / (n - 1)
+
+    def pdf(self, x):
+        """
+        Calculates the PDF at a data point.
+        Returns the value of the PDF.
+        """
+        if type(x) is not np.ndarray:
+            raise TypeError("x must be a numpy.ndarray")
+
+        d = x.shape[0]
+
+        if len(x.shape) != 2 or x.shape != (d, 1):
+            raise ValueError("x must have the shape ({d}, 1)")
+
+        mean = self.mean
+        cov = self.cov
+        cov_det = np.linalg.det(cov)
+        cov_inv = np.linalg.inv(cov)
+
+        # denominator
+        den = np.sqrt(((2 * np.pi) ** d) * cov_det)
+
+        # exponential term
+        expo = -0.5 * np.matmul(np.matmul((x - mean).T, cov_inv), x - mean)
+
+        PDF = (1 / den) * np.exp(expo[0][0])
+
+        return PDF
