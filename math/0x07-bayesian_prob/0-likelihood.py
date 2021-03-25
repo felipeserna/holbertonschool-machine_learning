@@ -34,6 +34,7 @@ def likelihood(x, n, P):
     x_fact = np.math.factorial(x)
     n_x_fact = np.math.factorial(n - x)
 
-    likelihoods = (n_fact / (x_fact * n_x_fact)) * (P ** x) * (1 - P) ** (n - x)
+    likelihoods = \
+        (n_fact / (x_fact * n_x_fact)) * (P ** x) * (1 - P) ** (n - x)
 
     return likelihoods
