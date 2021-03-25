@@ -42,6 +42,7 @@ def likelihood(x, n, P):
 
     return likelihoods
 
+
 def intersection(x, n, P, Pr):
     """
     Returns: a 1D numpy.ndarray containing the intersection
