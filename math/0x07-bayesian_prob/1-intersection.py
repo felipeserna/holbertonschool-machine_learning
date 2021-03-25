@@ -43,7 +43,7 @@ def intersection(x, n, P, Pr):
         raise ValueError("Pr must sum to 1")
 
     n_fact = np.math.factorial(n)
-    x_fact = np.math.factorial(x)
+    x_fact = np.math.factorial(x)sssssss
     n_x_fact = np.math.factorial(n - x)
 
     likelihoods = \
