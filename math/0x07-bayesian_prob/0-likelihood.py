@@ -30,4 +30,10 @@ def likelihood(x, n, P):
         if prob < 0 or prob > 1:
             raise ValueError("All values in P must be in the range [0, 1]")
 
-    return None
+    n_fact = np.math.factorial(n)
+    x_fact = np.math.factorial(x)
+    n_x_fact = np.math.factorial(n - x)
+
+    likelihoods = (n_fact / (x_fact * n_x_fact)) * (P ** x) * (1 - P) ** (n - x)
+
+    return likelihoods
