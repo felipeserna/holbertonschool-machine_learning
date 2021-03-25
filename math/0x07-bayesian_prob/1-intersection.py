@@ -29,12 +29,12 @@ def intersection(x, n, P, Pr):
     if type(Pr) is not np.ndarray or Pr.shape != P.shape:
         raise TypeError("Pr must be a numpy.ndarray with the same shape as P")
 
-    err = ("All values in {} must be in the range [0, 1]".format(P))
+    err = "All values in P must be in the range [0, 1]"
     for prob in P:
         if prob < 0 or prob > 1:
             raise ValueError(err)
 
-    err = ("All values in {} must be in the range [0, 1]".format(Pr))
+    err = "All values in Pr must be in the range [0, 1]"
     for prior in Pr:
         if prior < 0 or prior > 1:
             raise ValueError(err)
