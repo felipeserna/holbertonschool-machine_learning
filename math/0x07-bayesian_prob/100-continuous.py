@@ -41,6 +41,8 @@ def posterior(x, n, p1, p2):
     b: Shape parameter (b > 0)
     x: Upper limit of integration, in [0, 1]
     """
+    # x follows a binomial distribution
+    # Relation between beta distribution and binomial distribution
     a = x + 1
     b = n - x + 1
 
