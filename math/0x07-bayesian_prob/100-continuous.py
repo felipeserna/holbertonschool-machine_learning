@@ -31,4 +31,22 @@ def posterior(x, n, p1, p2):
     if p2 <= p1:
         raise ValueError("p2 must be greater than p1")
 
-    return None
+    """
+    Cumulative distribution function of the beta distribution.
+
+    Returns the integral from zero to x
+    of the beta probability density function.
+    btdtr(a, b, x)
+    a: Shape parameter (a > 0)
+    b: Shape parameter (b > 0)
+    x: Upper limit of integration, in [0, 1]
+    """
+    a = x + 1
+    b = n - x + 1
+
+    cdf_beta1 = special.btdtr(a, b, p1)
+    cdf_beta2 = special.btdtr(a, b, p2)
+
+    Posterior = cdf_beta2 - cdf_beta1
+
+    return Posterior
