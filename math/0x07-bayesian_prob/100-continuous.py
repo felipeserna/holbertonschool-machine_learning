@@ -34,12 +34,12 @@ def posterior(x, n, p1, p2):
     """
     Cumulative distribution function of the beta distribution.
 
-    Returns the integral from zero to x
+    Returns the integral from zero to u
     of the beta probability density function.
-    btdtr(a, b, x)
+    btdtr(a, b, u)
     a: Shape parameter (a > 0)
     b: Shape parameter (b > 0)
-    x: Upper limit of integration, in [0, 1]
+    u: Upper limit of integration, in [0, 1]
     """
     # x follows a binomial distribution
     # Relation between beta distribution and binomial distribution
