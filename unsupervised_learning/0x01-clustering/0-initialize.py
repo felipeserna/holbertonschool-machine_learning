@@ -12,4 +12,4 @@ def initialize(X, k):
     Returns: a numpy.ndarray of shape (k, d)
     containing the initialized centroids for each cluster, or None on failure
     """
-    
+    return None
