@@ -20,6 +20,9 @@ def initialize(X, k):
     maxi = np.amax(X, axis=0)
 
     # Initialize cluster centroids
-    init = np.random.uniform(mini, maxi, size=(k, d))
+    try:
+        init = np.random.uniform(mini, maxi, size=(k, d))
+    except Exception:
+        return None
 
     return init
