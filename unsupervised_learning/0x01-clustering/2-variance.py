@@ -18,4 +18,11 @@ def variance(X, C):
     if type(C) is not np.ndarray or len(C.shape) != 2:
         return None
 
-    return None
+    # https://www.youtube.com/watch?v=xNfOheh-res&ab_channel=VictorLavrenko
+
+    dist = np.linalg.norm(X[:, np.newaxis] - C, axis=-1)
+    min_dist = np.min(dist, axis=-1)
+    intra_var = np.sum(min_dist**2)
+    total_var = np.sum(intra_var)
+
+    return total_var
