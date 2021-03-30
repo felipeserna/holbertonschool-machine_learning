@@ -46,15 +46,16 @@ def kmeans(X, k, iterations=1000):
     clss = None
     for _ in range(iterations):
         C_copy = np.copy(C)
+        # new axis for broadcasting
         dist = np.linalg.norm(X[:, np.newaxis] - C, axis=-1)
         # minimum distance
         clss = np.argmin(dist, axis=-1)
-        # move the centroids
+        # recalculate the centroids
         for j in range(k):
             index = np.argwhere(clss == j)
             # If a cluster contains no data points during the update step,
             # reinitialize its centroid
-            if not len(index):
+            if len(index) == 0:
                 C[j] = initialize(X, 1)
             else:
                 C[j] = np.mean(X[index], axis=0)
@@ -64,6 +65,7 @@ def kmeans(X, k, iterations=1000):
         if (C_copy == C).all():
             return C, clss
 
+    # new axis for broadcasting
     dist = np.linalg.norm(X[:, np.newaxis] - C, axis=-1)
     clss = np.argmin(dist, axis=-1)
 
