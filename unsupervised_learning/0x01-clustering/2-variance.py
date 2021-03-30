@@ -22,7 +22,7 @@ def variance(X, C):
 
     dist = np.linalg.norm(X - C[:, np.newaxis], axis=2)
     min_dist = np.min(dist, axis=0)
-    intra_var = np.sum(min_dist**2)
-    total_var = np.sum(intra_var)
+    intra_var = (min_dist**2).sum()
+    total_var = (intra_var).sum()
 
     return total_var
