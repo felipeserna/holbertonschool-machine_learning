@@ -21,9 +21,11 @@ def variance(X, C):
     if X.shape[0] < C.shape[0] or X.shape[1] != C.shape[1]:
         return None
 
-    dist = np.linalg.norm(X - C[:, np.newaxis], axis=2)
-    min_dist = np.min(dist, axis=0)
-    intra_var = (min_dist**2).sum()
-    total_var = (intra_var).sum()
+    # https://www.youtube.com/watch?v=xNfOheh-res&ab_channel=VictorLavrenko
+
+    dist = np.linalg.norm(X[:, np.newaxis] - C, axis=-1)
+    min_dist = np.min(dist, axis=-1)
+    intra_var = np.sum(min_dist**2)
+    total_var = np.sum(intra_var)
 
     return total_var
