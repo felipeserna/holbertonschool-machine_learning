@@ -20,8 +20,8 @@ def variance(X, C):
 
     # https://www.youtube.com/watch?v=xNfOheh-res&ab_channel=VictorLavrenko
 
-    dist = np.linalg.norm(X[:, np.newaxis] - C, axis=-1)
-    min_dist = np.min(dist, axis=-1)
+    dist = np.linalg.norm(X[:, np.newaxis] - C, axis=2)
+    min_dist = np.min(dist, axis=0)
     intra_var = np.sum(min_dist**2)
     total_var = np.sum(intra_var)
 
