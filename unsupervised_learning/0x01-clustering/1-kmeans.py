@@ -63,23 +63,15 @@ def kmeans(X, k, iterations=1000):
 
 def initialize(X, k):
     """
-    Function that initializes cluster centroids for K-means
-    Arguments:
-     - X is a numpy.ndarray of shape (n, d) containing the dataset
-         that will be used for K-means clustering
-        * n is the number of data points
-        * d is the number of dimensions for each data point
-     - k is a positive integer containing the number of clusters
-    Returns:
-     A numpy.ndarray of shape (k, d) containing the initialized centroids
-     for each cluster, or None on failure
+    Returns: a numpy.ndarray of shape (k, d)
+    containing the initialized centroids for each cluster, or None on failure
     """
 
-    n, d = X.shape
+    d = X.shape[1]
+    mini = np.amin(X, axis=0)
+    maxi = np.amax(X, axis=0)
 
-    minimum = np.amin(X, axis=0)
-    maximum = np.amax(X, axis=0)
+    # Initialize cluster centroids
+    init = np.random.uniform(mini, maxi, size=(k, d))
 
-    values = np.random.uniform(minimum, maximum, (k, d))
-
-    return values
+    return init
