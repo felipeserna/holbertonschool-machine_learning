@@ -1,26 +1,21 @@
 #!/usr/bin/env python3
 """
-Initializes variables for a Gaussian Mixture Model
+module 4-initialize
+contains function initialize
 """
-
-
 import numpy as np
 kmeans = __import__('1-kmeans').kmeans
 
 
 def initialize(X, k):
-    """
-    Returns: pi, m, S, or None, None, None on failure
-    """
-    if type(X) is not np.ndarray or len(X.shape) != 2:
+    """Initializes cluster centroids for K-means"""
+    if type(X) is not np.ndarray or len(X.shape) is not 2:
         return None, None, None
-
-    if type(k) is not int or k < 0:
+    if type(k) is not int or k < 1 or k >= X.shape[0]:
         return None, None, None
 
     d = X.shape[1]
-
-    pi = np.full((k,), 1 / k)
-    m, _ = kmeans(X, k)
-    S = np.full((k, d, d), np.identity(d))
+    pi = np.tile(1/k, (k,))
+    m = kmeans(X, k)[0]
+    S = np.tile(np.identity(d), (k, 1, 1))
     return pi, m, S
