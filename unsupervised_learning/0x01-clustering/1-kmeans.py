@@ -21,7 +21,7 @@ def kmeans(X, k, iterations=1000):
         return None, None
 
     C = initialize(X, k)
-    clss = None
+    #clss = None
     for _ in range(iterations):
         C_copy = np.copy(C)
         # new axis for broadcasting
