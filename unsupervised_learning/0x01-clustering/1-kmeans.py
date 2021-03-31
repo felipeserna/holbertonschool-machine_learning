@@ -20,11 +20,6 @@ def kmeans(X, k, iterations=1000):
     if type(iterations) is not int or iterations <= 0:
         return None, None
 
-    """n, d = X.shape
-
-    minimum = np.amin(X, axis=0)
-    maximum = np.amax(X, axis=0)"""
-
     C = initialize(X, k)
     clss = None
     for _ in range(iterations):
