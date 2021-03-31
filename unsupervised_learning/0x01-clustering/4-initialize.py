@@ -20,7 +20,7 @@ def initialize(X, k):
 
     d = X.shape[1]
 
-    pi = (1 / k) * np.ones(k)
+    pi = np.full((k,), 1 / k)
     m, _ = kmeans(X, k)
     S = np.full((k, d, d), np.identity(d))
     return pi, m, S
