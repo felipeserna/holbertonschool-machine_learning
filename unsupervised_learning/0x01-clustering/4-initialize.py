@@ -18,9 +18,6 @@ def initialize(X, k):
     if type(k) is not int or k < 0:
         return None, None, None
 
-    if k > X.shape[0]:
-        return None, None, None
-
     d = X.shape[1]
 
     pi = (1 / k) * np.ones(k)
