@@ -1,72 +1,32 @@
 #!/usr/bin/env python3
-"""
-Initializes cluster centroids for K-means.
-Performs K-means on a dataset.
-"""
-
-
+"""Program that performs K-means on a dataset"""
 import numpy as np
 
 
-def initialize(X, k):
-    """
-    Returns: a numpy.ndarray of shape (k, d)
-    containing the initialized centroids for each cluster, or None on failure
-    """
-    if type(X) is not np.ndarray or len(X.shape) != 2:
-        return None
-
-    if type(k) is not int or k <= 0 or k >= X.shape[0]:
-        return None
-
-    d = X.shape[1]
-    mini = np.amin(X, axis=0)
-    maxi = np.amax(X, axis=0)
-
-    # Initialize cluster centroids
-    init = np.random.uniform(mini, maxi, size=(k, d))
-
-    return init
-
-
 def kmeans(X, k, iterations=1000):
-    """
-    Returns: C, clss, or None, None on failure
-    """
+    """Function that performs K-means on a dataset"""
     if type(X) is not np.ndarray or len(X.shape) != 2:
         return None, None
-
-    if type(k) is not int or k <= 0 or k >= X.shape[0]:
+    if type(k) is not int or k <= 0:
         return None, None
-
     if type(iterations) is not int or iterations <= 0:
         return None, None
-
-    C = initialize(X, k)
-
-    for _ in range(iterations):
-        C_copy = np.copy(C)
-        # new axis for broadcasting
-        dist = np.linalg.norm(X[:, np.newaxis] - C, axis=-1)
-        # minimum distance
-        clss = np.argmin(dist, axis=-1)
-        # recalculate the centroids
-        for j in range(k):
-            index = np.argwhere(clss == j)
-            # If a cluster contains no data points during the update step,
-            # reinitialize its centroid
-            if len(index) == 0:
-                C[j] = initialize(X, 1)
+    n, d = X.shape
+    min = np.amin(X, axis=0)
+    max = np.amax(X, axis=0)
+    centroids = np.random.uniform(low=min, high=max, size=(k, d))
+    for i in range(iterations):
+        clss = np.argmin(np.linalg.norm(X[:, None] - centroids, axis=-1),
+                         axis=-1)
+        newCentroid = np.copy(centroids)
+        for c in range(k):
+            if c not in clss:
+                newCentroid[c] = np.random.uniform(min, max)
             else:
-                C[j] = np.mean(X[index], axis=0)
-
-        # If no change in the cluster centroids occurs between iterations,
-        # return
-        if (C_copy == C).all():
-            return C, clss
-
-    # new axis for broadcasting
-    dist = np.linalg.norm(X[:, np.newaxis] - C, axis=-1)
-    clss = np.argmin(dist, axis=-1)
-
-    return C, clss
+                newCentroid[c] = np.mean(X[clss == c], axis=0)
+        if np.array_equal(newCentroid, centroids):
+            return (centroids, clss)
+        else:
+            centroids = newCentroid
+    clss = np.argmin(np.linalg.norm(X[:, None] - centroids, axis=-1), axis=-1)
+    return (centroids, clss)
