@@ -35,8 +35,6 @@ def expectation_maximization(X, k, iterations=1000, tol=1e-5, verbose=False):
 
     g, total_log_like = expectation(X, pi, m, S)
 
-
-
     text = "Log Likelihood after {} iterations: {}"
 
     for i in range(iterations):
