@@ -32,7 +32,7 @@
 
 3. The Forward Algorithm
 
-4. The Viretbi Algorithm
+4. The Viterbi Algorithm
 
 5. The Backward Algorithm
 
