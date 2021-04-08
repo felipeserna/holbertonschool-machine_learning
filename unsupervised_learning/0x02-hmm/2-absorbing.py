@@ -34,7 +34,7 @@ def absorbing(P):
     Q = P[count:, count:]
     Id = np.eye(Q.shape[0])
 
-    # Does it have a fundamental matrix for P?
+    # Is there a fundamental matrix for P?
 
     try:
         if (np.any(np.linalg.inv(Id - Q))):
