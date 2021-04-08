@@ -31,11 +31,13 @@ def absorbing(P):
         return False
 
     count = np.count_nonzero(D == 1)
-    B = P[count:, count:]
-    Id = np.eye(B.shape[0])
+    Q = P[count:, count:]
+    Id = np.eye(Q.shape[0])
+
+    # Does it have a fundamental matrix for P?
 
     try:
-        if (np.any(np.linalg.inv(Id - B))):
+        if (np.any(np.linalg.inv(Id - Q))):
             return True
     except np.linalg.LinAlgError:
         return False
