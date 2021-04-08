@@ -11,15 +11,30 @@ def absorbing(P):
     """
     Returns: True if it is absorbing, or False on failure
     """
-    if np.all(np.diag(P) == 1):
-        return True
+    if type(P) is not np.ndarray or len(P.shape) is not 2:
+        return False
+    n, columns = P.shape
 
-    if P[0, 0] != 1:
+    if n != columns:
         return False
 
-    P = P[1:, 1:]
+    if np.sum(P, axis=1).all() != 1:
+        return False
 
-    if np.all(np.count_nonzero(P, axis=0) > 2):
+    D = np.diagonal(P)
+
+    if not np.any(D == 1):
+        return False
+
+    if np.all(D == 1):
         return True
-    else:
+
+    count = np.count_nonzero(D == 1)
+    B = P[count:, count:]
+    Id = np.eye(B.shape[0])
+
+    try:
+        if (np.any(np.linalg.inv(Id - B))):
+            return True
+    except np.linalg.LinAlgError:
         return False
