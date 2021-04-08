@@ -11,11 +11,12 @@ def absorbing(P):
     """
     Returns: True if it is absorbing, or False on failure
     """
-    if type(P) is not np.ndarray or len(P.shape) is not 2:
+    if type(P) is not np.ndarray or len(P.shape) != 2:
         return False
-    n, columns = P.shape
 
-    if n != columns:
+    rows, columns = P.shape
+
+    if rows != columns:
         return False
 
     if np.sum(P, axis=1).all() != 1:
@@ -23,11 +24,11 @@ def absorbing(P):
 
     D = np.diagonal(P)
 
-    if not np.any(D == 1):
-        return False
-
     if np.all(D == 1):
         return True
+
+    if not np.any(D == 1):
+        return False
 
     count = np.count_nonzero(D == 1)
     B = P[count:, count:]
