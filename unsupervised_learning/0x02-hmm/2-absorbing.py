@@ -11,7 +11,15 @@ def absorbing(P):
     """
     Returns: True if it is absorbing, or False on failure
     """
-    if len(P.shape) != 2 or P.shape[0] != P.shape[1] or P.shape[0] < 1:
+    if np.all(np.diag(P) == 1):
+        return True
+
+    if P[0, 0] != 1:
         return False
 
-    return False
+    P = P[1:, 1:]
+
+    if np.all(np.count_nonzero(P, axis=0) > 2):
+        return True
+    else:
+        return False
