@@ -23,4 +23,6 @@ def markov_chain(P, s, t=1):
     if type(t) is not int or t < 1:
         return None
 
-    return None
+    final = np.matmul(s, np.linalg.matrix_power(P, t))
+
+    return final
