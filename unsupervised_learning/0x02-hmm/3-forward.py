@@ -45,8 +45,8 @@ def forward(Observation, Emission, Transition, Initial):
     F = np.zeros((N, T))
 
     # Initialization
-    Obs_i = Observation[0]
-    F[:, 0] = np.multiply(Initial[:, 0], Emission[:, Obs_i])
+    init_Obs = Observation[0]
+    F[:, 0] = np.multiply(Initial[:, 0], Emission[:, init_Obs])
 
     # Recursion
     for i in range(1, T):
