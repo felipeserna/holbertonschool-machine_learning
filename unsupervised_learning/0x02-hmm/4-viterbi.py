@@ -45,11 +45,9 @@ def viterbi(Observation, Emission, Transition, Initial):
     viterbi = np.zeros((N, T))
     backpointer = np.zeros((N, T))
 
-    # Initialization
-    Obs_t = Observation[0]
+    # Initialization step
+    viterbi[:, 0] = Initial.transpose() * Emission[:, Observation[0]]
     backpointer[:, 0] = 0
-    prob = np.multiply(Initial[:, 0], Emission[:, Obs_t])
-    viterbi[:, 0] = prob
 
     # Recursion
     for t in range(1, T):
@@ -73,8 +71,7 @@ def viterbi(Observation, Emission, Transition, Initial):
         current = int(backpointer[current, t])
         path = [current] + path
 
-    # max path probabilities among all possible states
-    # end of path
+    # Probability of obtaining the path sequence
 
     P = np.amax(viterbi[:, T - 1], axis=0)
 
