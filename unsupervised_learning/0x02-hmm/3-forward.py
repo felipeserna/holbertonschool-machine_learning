@@ -49,8 +49,8 @@ def forward(Observation, Emission, Transition, Initial):
 
     # Recursion
     for i in range(1, T):
-        state = np.matmul(F[:, i - 1], Transition)
-        F[:, i] = state * Emission[:, Observation[i]]
+        F[:, i] = \
+            np.matmul(F[:, i - 1], Transition) * Emission[:, Observation[i]]
 
     P = np.sum(F[:, T - 1])
 
