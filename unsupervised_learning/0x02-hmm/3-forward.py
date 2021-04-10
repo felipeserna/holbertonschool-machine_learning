@@ -46,16 +46,14 @@ def forward(Observation, Emission, Transition, Initial):
 
     # Initialization
     init_Obs = Observation[0]
-    F[:, 0] = np.multiply(Initial.transpose(), Emission[:, init_Obs])
+    F[:, 0] = Initial.transpose() * Emission[:, init_Obs]
 
     # Recursion
     for i in range(1, T):
         Obs_i = Observation[i]
         state = np.matmul(F[:, i - 1], Transition)
-        F[:, i] = np.multiply(state, Emission[:, Obs_i])
+        F[:, i] = state * Emission[:, Obs_i]
 
-    # Sum of path probabilities over all possible states
-    # end of path
     P = np.sum(F[:, T - 1])
 
     return P, F
