@@ -38,4 +38,7 @@ def forward(Observation, Emission, Transition, Initial):
     if Initial.shape[0] != Transition.shape[0] or Initial.shape[1] != 1:
         return None, None
 
+    if Initial.shape[1] != 1:
+        return None, None
+
     return None, None
