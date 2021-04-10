@@ -52,7 +52,7 @@ def viterbi(Observation, Emission, Transition, Initial):
     # Recursion
     for t in range(1, T):
         a = viterbi[:, t - 1]
-        b = Transition.T
+        b = Transition.transpose()
         ab = a * b
         ab_max = np.amax(ab, axis=1)
         c = Emission[:, Observation[t]]
