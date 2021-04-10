@@ -44,15 +44,13 @@ def forward(Observation, Emission, Transition, Initial):
 
     F = np.zeros((N, T))
 
-    # Initialization
-    init_Obs = Observation[0]
-    F[:, 0] = Initial.transpose() * Emission[:, init_Obs]
+    # Initialization step
+    F[:, 0] = Initial.transpose() * Emission[:, Observation[0]]
 
     # Recursion
     for i in range(1, T):
-        Obs_i = Observation[i]
         state = np.matmul(F[:, i - 1], Transition)
-        F[:, i] = state * Emission[:, Obs_i]
+        F[:, i] = state * Emission[:, Observation[i]]
 
     P = np.sum(F[:, T - 1])
 
