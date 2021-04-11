@@ -47,7 +47,6 @@ def viterbi(Observation, Emission, Transition, Initial):
 
     # Initialization step
     viterbi[:, 0] = Initial.transpose() * Emission[:, Observation[0]]
-    backpointer[:, 0] = 0
 
     # Recursion
     for t in range(1, T):
