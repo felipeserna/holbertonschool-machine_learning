@@ -42,23 +42,18 @@ def backward(Observation, Emission, Transition, Initial):
     if not np.sum(Initial) == 1:
         return None, None
 
-    Beta = np.zeros((N, T))
-    # initialization
-    Beta[:, T - 1] = np.ones(N)
+    B = np.zeros((N, T))
 
-    # recursion
+    # Initialization step
+    B[:, T - 1] = np.ones(N)
+
+    # Recursion
     for t in range(T - 2, -1, -1):
-        a = Transition
-        b = Emission[:, Observation[t + 1]]
-        c = Beta[:, t + 1]
+        prob = \
+            np.sum(B[:, t + 1] *
+                   Emission[:, Observation[t + 1]] * Transition, axis=1)
+        B[:, t] = prob
 
-        abc = a * b * c
-        prob = np.sum(abc, axis=1)
-        Beta[:, t] = prob
+    P = np.sum(Initial[:, 0] * Emission[:, Observation[0]] * B[:, 0])
 
-    # sum of path probabilities over all possible states
-    # end of path
-    P_first = Initial[:, 0] * Emission[:, Observation[0]] * Beta[:, 0]
-    P = np.sum(P_first)
-
-    return P, Beta
+    return P, B
