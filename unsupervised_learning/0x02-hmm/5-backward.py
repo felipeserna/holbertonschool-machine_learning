@@ -54,6 +54,7 @@ def backward(Observation, Emission, Transition, Initial):
                    Emission[:, Observation[t + 1]] * Transition, axis=1)
         B[:, t] = prob
 
+    # Likelihood of the observations given the model
     P = np.sum(Initial[:, 0] * Emission[:, Observation[0]] * B[:, 0])
 
     return P, B
