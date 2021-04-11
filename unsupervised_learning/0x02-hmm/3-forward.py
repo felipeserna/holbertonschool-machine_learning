@@ -52,6 +52,7 @@ def forward(Observation, Emission, Transition, Initial):
         F[:, i] = \
             np.matmul(F[:, i - 1], Transition) * Emission[:, Observation[i]]
 
+    # Likelihood of the observations given the model
     P = np.sum(F[:, T - 1])
 
     return P, F
