@@ -110,37 +110,20 @@ def backward(Observation, Emission, Transition, Initial):
 
 def baum_welch(Observations, Transition, Emission, Initial, iterations=1000):
     """
-    performs the Baum-Welch algorithm for a hidden markov model
-    :param Observations: numpy.ndarray of shape (T,)
-        that contains the index of the observation
-        T is the number of observations
-    :param Transition: numpy.ndarray of shape (M, M)
-        that contains the initialized transition probabilities
-        M is the number of hidden states
-    :param Emission: numpy.ndarray of shape (M, N)
-        that contains the initialized emission probabilities
-        N is the number of output states
-    :param Initial: numpy.ndarray of shape (M, 1)
-        that contains the initialized starting probabilities
-    :param iterations: number of times expectation-maximization
-        should be performed
-    :return: the converged Transition, Emission, or None, None on failure
+    Returns: the converged Transition, Emission, or None, None on failure
     """
-    # type and len(dim) conditions
-    if not isinstance(Observations, np.ndarray) \
-            or len(Observations.shape) != 1:
+    if type(Observations) is not np.ndarray or len(Observations.shape) != 1:
         return None, None
 
-    if not isinstance(Emission, np.ndarray) or len(Emission.shape) != 2:
+    if type(Transition) is not np.ndarray or len(Transition.shape) != 2:
         return None, None
 
-    if not isinstance(Transition, np.ndarray) or len(Transition.shape) != 2:
+    if type(Emission) is not np.ndarray or len(Emission.shape) != 2:
         return None, None
 
-    if not isinstance(Initial, np.ndarray) or len(Initial.shape) != 2:
+    if type(Initial) is not np.ndarray or len(Initial.shape) != 2:
         return None, None
 
-    # dim conditions
     T = Observations.shape[0]
     N, M = Emission.shape
 
@@ -150,15 +133,16 @@ def baum_welch(Observations, Transition, Emission, Initial, iterations=1000):
     if Initial.shape[0] != N or Initial.shape[1] != 1:
         return None, None
 
-    # stochastic
-    if not np.sum(Emission, axis=1).all():
-        return None, None
     if not np.sum(Transition, axis=1).all():
         return None, None
+
+    if not np.sum(Emission, axis=1).all():
+        return None, None
+
     if not np.sum(Initial) == 1:
         return None, None
 
-    for n in range(iterations):
+    for _ in range(iterations):
         _, alpha = forward(Observations, Emission, Transition, Initial)
         _, beta = backward(Observations, Emission, Transition, Initial)
 
