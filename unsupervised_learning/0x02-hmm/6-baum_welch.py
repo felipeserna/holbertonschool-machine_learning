@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""contains the baum_welch function"""
+"""
+Performs the Baum-Welch algorithm for a hidden markov model
+https://www.adeveloperdiary.com/data-science/machine-learning/
+derivation-and-implementation-of-baum-welch-algorithm-for-hidden-markov-model/
+"""
+
 
 import numpy as np
 
@@ -8,36 +13,9 @@ def forward(Observation, Emission, Transition, Initial):
     """
     Returns: P, F, or None, None on failure
     """
-    if type(Observation) is not np.ndarray or len(Observation.shape) != 1:
-        return None, None
-
-    if type(Emission) is not np.ndarray or len(Emission.shape) != 2:
-        return None, None
-
-    if type(Transition) is not np.ndarray or len(Transition.shape) != 2:
-        return None, None
-
-    if type(Initial) is not np.ndarray or len(Initial.shape) != 2:
-        return None, None
-
     T = Observation.shape[0]
 
     N, _ = Emission.shape
-
-    if Transition.shape[0] != N or Transition.shape[1] != N:
-        return None, None
-
-    if Initial.shape[0] != N or Initial.shape[1] != 1:
-        return None, None
-
-    if not np.sum(Emission, axis=1).all():
-        return None, None
-
-    if not np.sum(Transition, axis=1).all():
-        return None, None
-
-    if not np.sum(Initial) == 1:
-        return None, None
 
     F = np.zeros((N, T))
 
@@ -59,36 +37,9 @@ def backward(Observation, Emission, Transition, Initial):
     """
     Returns: P, B, or None, None on failure
     """
-    if type(Observation) is not np.ndarray or len(Observation.shape) != 1:
-        return None, None
-
-    if type(Emission) is not np.ndarray or len(Emission.shape) != 2:
-        return None, None
-
-    if type(Transition) is not np.ndarray or len(Transition.shape) != 2:
-        return None, None
-
-    if type(Initial) is not np.ndarray or len(Initial.shape) != 2:
-        return None, None
-
     T = Observation.shape[0]
 
     N, _ = Emission.shape
-
-    if Transition.shape[0] != N or Transition.shape[1] != N:
-        return None, None
-
-    if Initial.shape[0] != N or Initial.shape[1] != 1:
-        return None, None
-
-    if not np.sum(Emission, axis=1).all():
-        return None, None
-
-    if not np.sum(Transition, axis=1).all():
-        return None, None
-
-    if not np.sum(Initial) == 1:
-        return None, None
 
     B = np.zeros((N, T))
 
@@ -169,7 +120,7 @@ def baum_welch(Observations, Transition, Emission, Initial, iterations=1000):
         Transition = num / den
 
         # EMISSION CALCULATION
-        # add additional T'th element in gamma
+        # Add additional T'th element in gamma
         xi_sum = np.sum(xi[:, :, T - 2], axis=0)
         xi_sum = xi_sum.reshape((-1, 1))
         gamma = np.hstack((gamma, xi_sum))
