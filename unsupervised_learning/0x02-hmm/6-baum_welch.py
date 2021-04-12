@@ -99,16 +99,16 @@ def baum_welch(Observations, Transition, Emission, Initial, iterations=1000):
 
         xi = np.zeros((N, N, T - 1))
         for t in range(T - 1):
-            a = np.matmul(alpha[:, t].T, Transition)
-            b = Emission[:, Observations[t + 1]].T
+            a = np.matmul(alpha[:, t].transpose(), Transition)
+            b = Emission[:, Observations[t + 1]].transpose()
             c = beta[:, t + 1]
             denominator = np.matmul(a * b, c)
 
             for i in range(N):
                 a = alpha[i, t]
                 b = Transition[i]
-                c = Emission[:, Observations[t + 1]].T
-                d = beta[:, t + 1].T
+                c = Emission[:, Observations[t + 1]].transpose()
+                d = beta[:, t + 1].transpose()
                 numerator = a * b * c * d
                 xi[i, :, t] = numerator / denominator
 
