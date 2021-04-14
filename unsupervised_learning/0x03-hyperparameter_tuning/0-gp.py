@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """
+http://krasserm.github.io/2018/03/19/gaussian-processes/
 Represents a noiseless 1D Gaussian process
 """
-
-
 import numpy as np
 
 
