@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """
-http://krasserm.github.io/2018/03/21/bayesian-optimization/
 Performs Bayesian optimization on a noiseless 1D Gaussian process
 """
 import numpy as np
