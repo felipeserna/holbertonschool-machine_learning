@@ -64,20 +64,23 @@ class BayesianOptimization:
         """
         Optimizes the black-box function
         """
-        GP = self.gp
-        for i in range(iterations):
-            X_new, EI = self.acquisition()
-            X = self.gp.X
-            if (X_new == X).any():
-                GP.X = GP.X[:-1]
+        for _ in range(iterations):
+            X_next, _ = self.acquisition()
+            Y_next = self.f(X_next)
+
+            if (X_next == self.gp.X).any():
+                self.gp.X = self.gp.X[:-1]
                 break
 
-            Y_new = self.f(X_new)
-            GP.update(X_new, Y_new)
+            self.gp.update(X_next, Y_next)
 
         if self.minimize:
-            idx = np.argmin(GP.Y)
-        else:
-            idx = np.argmax(GP.Y)
+            idx = np.argmin(self.gp.Y)
 
-        return GP.X[idx], GP.Y[idx]
+        else:
+            idx = np.argmax(self.gp.Y)
+
+        X_opt = self.gp.X[idx]
+        Y_opt = self.gp.Y[idx]
+
+        return (X_opt, Y_opt)
