@@ -64,28 +64,20 @@ class BayesianOptimization:
         """
         Optimizes the black-box function
         """
-        for i in range(0, iterations):
-            # Obtain next sampling point from the acquisition function
-            # (expected_improvement)
-            X_next, EI = self.acquisition()
-
-            if X_next in self.gp.X:
+        GP = self.gp
+        for i in range(iterations):
+            X_new, EI = self.acquisition()
+            X = self.gp.X
+            if (X_new == X).any():
+                GP.X = GP.X[:-1]
                 break
 
-            # Obtain next noisy sample from the objective function
-            Y_next = self.f(X_next)
+            Y_new = self.f(X_new)
+            GP.update(X_new, Y_new)
 
-            # Add sample to previous samples and Update Gaussian process
-            # with existing samples
-            self.gp.update(X_next, Y_next)
-
-        # find optimal values
-        if self.minimize is True:
-            idx = np.argmin(self.gp.Y)
+        if self.minimize:
+            idx = np.argmin(GP.Y)
         else:
-            idx = np.argmax(self.gp.Y)
+            idx = np.argmax(GP.Y)
 
-        X_opt = self.gp.X[idx]
-        Y_opt = self.gp.Y[idx]
-
-        return X_opt, Y_opt
+        return GP.X[idx], GP.Y[idx]
