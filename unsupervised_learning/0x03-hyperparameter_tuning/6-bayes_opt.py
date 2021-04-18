@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """
-Optimizes an ML model of your choice using GPyOpt
+Trains a CNN
+to classify the CIFAR 10 dataset.
+
+Optimizes an ML model of your choice using GPyOpt.
 """
 import numpy as np
 import tensorflow.keras as K
