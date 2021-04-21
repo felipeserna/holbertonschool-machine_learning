@@ -9,9 +9,9 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     """
     Returns: encoder, decoder, auto
     """
+    # Encoder
     inputs_enc = keras.Input(shape=(input_dims,))
 
-    # Encoder
     layer_enc = keras.layers.Dense(units=hidden_layers[0],
                                    activation='relu')(inputs_enc)
 
