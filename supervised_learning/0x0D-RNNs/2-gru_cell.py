@@ -61,9 +61,9 @@ class GRUCell:
         # Intermediate memory content
         intermediate = np.concatenate((r_t * h_prev, x_t), axis=1)
 
-        h = np.tanh(intermediate @ self.Wh + self.bh)
+        h_t = np.tanh(intermediate @ self.Wh + self.bh)
 
-        h_next = (1 - z_t) * h_prev + z_t * h
+        h_next = (1 - z_t) * h_prev + z_t * h_t
 
         y = softmax(h_next @ self.Wy + self.by)
 
