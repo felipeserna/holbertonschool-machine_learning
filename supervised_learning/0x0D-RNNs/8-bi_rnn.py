@@ -28,7 +28,8 @@ def bi_rnn(bi_cell, X, h_0, h_t):
     for bw_step in range(t - 1, -1, -1):
         Hb[bw_step] = bi_cell.backward(Hb[bw_step + 1], X[bw_step])
 
-    # All of the concatenated hidden states
+    # All of the concatenated hidden states from both directions,
+    # excluding their initialized states.
     H = np.concatenate((Hf[1:], Hb[0:t]), axis=-1)
 
     # All of the outputs
