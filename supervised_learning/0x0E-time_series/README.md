@@ -10,5 +10,6 @@
 
 ## Tasks
 0. When to Invest
+Your model should use the past 24 hours of BTC data to predict the value of BTC at the close of the following hour (approximately how long the average transaction takes).
 
 1. Everyone wants to know
