@@ -13,13 +13,10 @@ data = \
 data = data.drop(["Open", "High", "Low", "Volume_(BTC)",
                  "Volume_(Currency)", "Weighted_Price"], axis=1)
 
-data = data[0::60]
-# creating bool series True for Not NaN values
-# bool_series = pd.notnull(data["Open"])
+df = data.dropna()
 
-# displaying data only with Open = Not NaN
-# new_data = data[bool_series]
-# converted_df = pd.to_datetime(new_data["Timestamp"], unit="s")
-# new_data = new_data[convert]
-# print(converted_df)
-print(data)
+df = df[0::60]
+
+df['Timestamp'] = pd.to_datetime(df['Timestamp'], unit='s')
+df.reset_index(inplace=True, drop=True)
+print(df)
