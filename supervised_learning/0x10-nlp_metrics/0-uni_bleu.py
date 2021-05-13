@@ -9,4 +9,4 @@ def uni_bleu(references, sentence):
     """
     Returns: the unigram BLEU score
     """
-    return None
+    return 0.0
