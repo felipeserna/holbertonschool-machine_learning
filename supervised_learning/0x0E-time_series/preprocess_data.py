@@ -4,6 +4,8 @@ Preprocess raw dataset
 """
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
+import tensorflow as tf
 
 
 def preprocess_raw_data():

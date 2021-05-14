@@ -2,10 +2,10 @@
 """
 Creates, trains, and validates a keras model for the forecasting of BTC
 """
+import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
-import pandas as pd
 
 
 class WindowGenerator:
@@ -80,7 +80,7 @@ class WindowGenerator:
         max_n = min(max_subplots, len(inputs))
 
         for n in range(max_n):
-            plt.subplot(3, 1, n + 1)
+            plt.subplot(max_n, 1, n + 1)
             plt.ylabel(f'{plot_col} [normed]')
             plt.plot(self.input_indices, inputs[n, :, plot_col_index],
                      label='Inputs', marker='.', zorder=-10)
@@ -99,8 +99,11 @@ class WindowGenerator:
 
             if model is not None:
                 predictions = model(inputs)
-                plt.scatter(self.label_indices,
-                            predictions[n, :, label_col_index],
+                # checking shapes
+                print("check1", (labels[:, :, label_col_index]).shape)
+                print("check2", (predictions[:, 0]).shape)
+                plt.scatter(labels[:, :, label_col_index],
+                            predictions[:, 0],
                             marker='X', edgecolors='k',
                             label='Predictions',
                             c='#ff7f0e', s=64)
@@ -122,51 +125,37 @@ class WindowGenerator:
             sequence_length=self.total_window_size,
             sequence_stride=1,
             shuffle=True,
-            batch_size=32,)
+            batch_size=24,)
 
         ds = ds.map(self.split_window)
 
         return ds
 
+    @property
+    def train(self):
+        return self.make_dataset(self.train_df)
 
-class Baseline(tf.keras.Model):
-    """
-    Performance baseline as a point for comparison
-    with the later more complicated models
-    """
-    def __init__(self, label_index=None):
-        """
-        Class constructor
-        """
-        super().__init__()
-        self.label_index = label_index
+    @property
+    def val(self):
+        return self.make_dataset(self.val_df)
 
-    def call(self, inputs):
-        """
-        call
-        """
-        if self.label_index is None:
-            return inputs
-        result = inputs[:, :, self.label_index]
-        return result[:, :, tf.newaxis]
+    @property
+    def test(self):
+        return self.make_dataset(self.test_df)
 
-
-def build_model():
-    """
-    Returns: lstm_model
-    """
-    lstm_model = tf.keras.models.Sequential([
-        # Shape [batch, time, features] => [batch, time, lstm_units]
-        tf.keras.layers.LSTM(24, input_shape=[24, 7], return_sequences=True),
-        # Shape => [batch, time, features]
-        tf.keras.layers.Dense(units=1)
-    ])
-    lstm_model.summary()
-
-    return lstm_model
+    @property
+    def example(self):
+        """Get and cache an example batch of `inputs, labels` for plotting."""
+        result = getattr(self, '_example', None)
+        if result is None:
+            # No example batch was found, so get one from the `.train` dataset
+            result = next(iter(self.train))
+            # And cache it for next time
+            self._example = result
+        return result
 
 
-def compile_and_fit(model, window, patience=2, epochs=500):
+def compile_and_fit(model, window, patience=2, epochs=2):
     """
     Returns: history
     """
@@ -182,8 +171,6 @@ def compile_and_fit(model, window, patience=2, epochs=500):
                         validation_data=window.val,
                         callbacks=[early_stopping])
 
-    print(model.summary())
-
     return history
 
 
@@ -191,31 +178,28 @@ def forecasting(train, validation, test):
     """
     Returns: nothing
     """
-    window = WindowGenerator(input_width=24, label_width=24, shift=1,
+    window = WindowGenerator(input_width=24, label_width=1, shift=1,
                              train_df=train, val_df=validation, test_df=test,
                              label_columns=['Close'])
 
-    column_indices = window.column_indices
+    lstm_model = tf.keras.models.Sequential([
+        # Shape [batch, time, features] => [batch, time, lstm_units]
+        tf.keras.layers.LSTM(24, return_sequences=False),
+        # Shape => [batch, time, features]
+        tf.keras.layers.Dense(units=1)])
 
-    print(window)
+    # Train the model and evaluate its performance
+    history = compile_and_fit(lstm_model, window)
 
     val_performance = {}
     performance = {}
-
-    baseline = Baseline(label_index=column_indices['Close'])
-
-    baseline.compile(loss=tf.keras.losses.MeanSquaredError(),
-                     metrics=[tf.keras.metrics.MeanAbsoluteError()])
-
-    lstm_model = tf.keras.models.Sequential([
-        tf.keras.layers.LSTM(32, return_sequences=True),
-        tf.keras.layers.Dense(units=1)])
-    history = compile_and_fit(lstm_model, window)
-
     val_performance['LSTM'] = lstm_model.evaluate(window.val)
     performance['LSTM'] = lstm_model.evaluate(window.test, verbose=0)
+
     window.plot(lstm_model)
 
+
+# here goes the main file
 
 if __name__ == "__main__":
     preprocess = __import__('preprocess_data').preprocess_raw_data
