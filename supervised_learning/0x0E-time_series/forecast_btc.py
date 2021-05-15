@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
 Creates, trains, and validates a keras model for the forecasting of BTC
+Tensorflow 2.4.1
 """
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -78,6 +79,8 @@ class WindowGenerator:
         plt.figure(figsize=(12, 8))
         plot_col_index = self.column_indices[plot_col]
         max_n = min(max_subplots, len(inputs))
+        # labels = labels*3723.88566 + 5774.6824
+        # inputs = inputs*3723.88566 + 5774.6824
 
         for n in range(max_n):
             plt.subplot(max_n, 1, n + 1)
@@ -99,14 +102,20 @@ class WindowGenerator:
 
             if model is not None:
                 predictions = model(inputs)
+                # tf.expand_dims(predictions, -1)
                 # checking shapes
-                print("check1", (labels[:, :, label_col_index]).shape)
-                print("check2", (predictions[:, 0]).shape)
-                plt.scatter(labels[:, :, label_col_index],
-                            predictions[:, 0],
+                # print("check_1", labels.shape)
+                # print("check_2", predictions.shape)
+                plt.scatter(self.label_indices,
+                            predictions[n, 0],
                             marker='X', edgecolors='k',
                             label='Predictions',
                             c='#ff7f0e', s=64)
+                # labels[n, :, label_col_index]
+                # predictions[n, 0]*3723.88566 + 5774.6824
+                # below it works
+                # self.label_indices
+                # predictions[n, 0],
 
             if n == 0:
                 plt.legend()
@@ -155,7 +164,7 @@ class WindowGenerator:
         return result
 
 
-def compile_and_fit(model, window, patience=2, epochs=2):
+def compile_and_fit(model, window, patience=2, epochs=20):
     """
     Returns: history
     """
