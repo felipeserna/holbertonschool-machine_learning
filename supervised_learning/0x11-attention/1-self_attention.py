@@ -40,10 +40,11 @@ class SelfAttention(tf.keras.layers.Layer):
 
         # Calculate the attention score
         score = self.V(tf.nn.tanh(self.W(exp_s_prev) + self.U(hidden_states)))
-        # Weights
+        # Attention Weights
         weights = tf.nn.softmax(score, axis=1)
 
         # Context as the weighted sum of the hidden_states
+        # Context vector for the decoder
         context = tf.reduce_sum(weights * hidden_states, axis=1)
 
         return context, weights
