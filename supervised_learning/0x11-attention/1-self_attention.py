@@ -33,9 +33,9 @@ class SelfAttention(tf.keras.layers.Layer):
           contains the outputs of the encoder
         Returns: context, weights
         """
-        # Expansion to match hidden_states dimensions (input_seq_len)
+        # Expansion for broadcasting
         # s_prev (batch, units)
-        # exp_s_prev (batch, input_seq_len, units)
+        # exp_s_prev (batch, 1, units)
         exp_s_prev = tf.expand_dims(s_prev, axis=1)
 
         # Calculate the attention score
