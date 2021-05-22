@@ -20,7 +20,8 @@ class EncoderBlock(tf.keras.layers.Layer):
         # MultiHeadAttention layer
         self.mha = MultiHeadAttention(dm, h)
         # the hidden dense layer with hidden units and relu activation
-        self.dense_hidden = tf.keras.layers.Dense(units=hidden, activation='relu')
+        self.dense_hidden = tf.keras.layers.Dense(units=hidden,
+                                                  activation='relu')
         # the output dense layer with dm units
         self.dense_output = tf.keras.layers.Dense(units=dm)
         # the first layer norm layer, with epsilon=1e-6
