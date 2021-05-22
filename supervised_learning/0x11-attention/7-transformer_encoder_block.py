@@ -38,17 +38,17 @@ class EncoderBlock(tf.keras.layers.Layer):
         Returns: a tensor of shape (batch, input_seq_len, dm)
         containing the block’s output
         """
+        # (batch, input_seq_len, dm)
         attn_output, _ = self.mha(x, x, x, mask)
-        # (batch, input_seq_len, dm)
         attn_output = self.dropout1(attn_output, training=training)
+        # (batch, input_seq_len, dm)
         out1 = self.layernorm1(x + attn_output)
-        # (batch, input_seq_len, dm)
 
-        ffn_output = self.dense_hidden(out1)
         # (batch, input_seq_len, dm)
+        ffn_output = self.dense_hidden(out1)
         ffn_output = self.dense_output(ffn_output)
         ffn_output = self.dropout2(ffn_output, training=training)
-        out2 = self.layernorm2(out1 + ffn_output)
         # (batch, input_seq_len, dm)
+        out2 = self.layernorm2(out1 + ffn_output)
 
         return out2
