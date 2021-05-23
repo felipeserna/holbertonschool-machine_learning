@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
 Class that inherits from tensorflow.keras.layers.Layer
-to create the encoder for a transformer
+to create the encoder for a transformer.
+https://www.tensorflow.org/tutorials/text/transformer#encoder
 """
 import tensorflow as tf
 positional_encoding = __import__('4-positional_encoding').positional_encoding
