@@ -45,7 +45,9 @@ class MultiHeadAttention(tf.keras.layers.Layer):
         """
         Returns: output, weights
         """
-        batch = tf.shape(Q)[0]
+        # batch = tf.shape(Q)[0]
+        # Kelsie
+        batch = Q.get_shape().as_list()[0]
 
         # (batch, seq_len_q, dk)
         Q = self.Wq(Q)
