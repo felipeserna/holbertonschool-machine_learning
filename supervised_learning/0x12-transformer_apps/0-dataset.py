@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """
-Class that loads and preps a dataset for machine translation
+Class that loads and preps a dataset for machine translation.
+Portugese-English translation dataset.
+Approximately 50000 training examples, 1100 validation examples,
+and 2000 test examples.
 """
 import tensorflow.compat.v2 as tf
 import tensorflow_datasets as tfds
