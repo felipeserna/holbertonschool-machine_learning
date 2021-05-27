@@ -48,22 +48,34 @@ class Dataset():
                                   tf.size(y) <= max_length)
 
         # Update data_train attribute
+        # Filter out all examples that have either sentence
+        # with more than max_len tokens
         self.data_train = self.data_train.filter(filter_max_length)
+        # cache the dataset to increase performance
         self.data_train = self.data_train.cache()
 
         train_dataset_size = self.metadata.splits['train'].num_examples
 
+        # shuffle the entire dataset
         self.data_train = self.data_train.shuffle(train_dataset_size)
+
+        # split the dataset into padded batches of size batch_size
         padded_shapes = ([None], [None])
         self.data_train = \
             self.data_train.padded_batch(batch_size,
                                          padded_shapes=padded_shapes)
 
+        # Prefetch the dataset using tf.data.experimental.AUTOTUNE
+        # to increase performance
         self.data_train = \
             self.data_train.prefetch(tf.data.experimental.AUTOTUNE)
 
         # Update data_valid attribute
+        # Filter out all examples that have either sentence
+        # with more than max_len tokens
         self.data_valid = self.data_valid.filter(filter_max_length)
+
+        # split the dataset into padded batches of size batch_size
         padded_shapes = ([None], [None])
         self.data_valid = \
             self.data_valid.padded_batch(batch_size,
