@@ -4,7 +4,6 @@ Creates all masks for training/validation.
 https://www.tensorflow.org/text/tutorials/transformer
 """
 import tensorflow.compat.v2 as tf
-import tensorflow_datasets as tfds
 
 
 def create_padding_mask(seq):
