@@ -116,3 +116,5 @@ def train_transformer(N, dm, h, hidden, max_len, batch_size, epochs):
               format(epoch + 1,
                      train_loss.result(),
                      train_accuracy.result()))
+
+    return transformer
