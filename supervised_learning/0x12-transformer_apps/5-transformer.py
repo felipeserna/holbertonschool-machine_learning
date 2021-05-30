@@ -6,7 +6,6 @@ to get it to functionally train.
 https://www.tensorflow.org/text/tutorials/transformer
 """
 import tensorflow.compat.v2 as tf
-import tensorflow_datasets as tfds
 import numpy as np
 
 
