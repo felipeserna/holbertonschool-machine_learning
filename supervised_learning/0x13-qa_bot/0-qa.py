@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
 Finds a snippet of text within a reference document
-to answer a question
+to answer a question.
+https://tfhub.dev/see--/bert-uncased-tf2-qa/1
 """
 import tensorflow as tf
 import tensorflow_hub as hub
