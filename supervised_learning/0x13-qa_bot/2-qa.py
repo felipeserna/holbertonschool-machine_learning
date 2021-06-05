@@ -10,7 +10,8 @@ from transformers import BertTokenizer
 def question_answer(question, reference):
     """
     Returns: a string containing the answer.
-    If no answer is found, return None
+    If no answer is found, return None.
+    This function was modified for Task 2
     """
     tokenizer = \
         BertTokenizer.from_pretrained('bert-large-uncased' +
@@ -55,8 +56,11 @@ def question_answer(question, reference):
         return "Sorry, I do not understand your question."
     return answer
 
-def answer_loop(reference):
 
+def answer_loop(reference):
+    """
+    Answers questions from a reference text
+    """
     while True:
         question = input("Q: ").lower()
 
