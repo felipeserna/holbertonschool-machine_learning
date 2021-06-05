@@ -5,18 +5,11 @@ and prints A: as a response.
 If the user inputs exit, quit, goodbye, or bye, case insensitive,
 print A: Goodbye and exit.
 """
+while True:
+    question = input("Q: ").lower()
 
-
-def get_answer(prompt):
-    """
-    get answer
-    """
-    answer = input(prompt)
-    print("A:")
-    while answer not in ("exit", "quit", "goodbye", "bye"):
-        answer = input(prompt)
+    if question in ["exit", "quit", "goodbye", "bye"]:
+        print("A: Goodbye")
+        exit()
+    else:
         print("A:")
-    return "A: Goodbye"
-
-print(get_answer("Q: "))
-#print("A:")
