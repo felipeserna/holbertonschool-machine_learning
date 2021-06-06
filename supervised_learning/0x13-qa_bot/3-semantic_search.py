@@ -24,8 +24,8 @@ def semantic_search(corpus_path, sentence):
             articles.append(file.read())
 
     embeddings = embed(articles)
-    # The semantic similarity of two sentences can be trivially computed as
-    # the inner product of the encodings
+    # The semantic similarity of two sentences is
+    # the inner product of the encodings.
     corr = np.inner(embeddings, embeddings)
     closest = np.argmax(corr[0, 1:])
     reference = articles[closest + 1]
