@@ -11,17 +11,17 @@ def semantic_search(corpus_path, sentence):
     """
     Returns: the reference text of the document most similar to 'sentence'
     """
+    articles = [sentence]
+
+    for filename in os.listdir(corpus_path):
+        if filename.endswith('.md'):
+            with open(corpus_path + '/' + filename,
+                      mode='r', encoding='utf-8') as file:
+                articles.append(file.read())
+
     embed = \
         hub.load("https://tfhub.dev/google/" +
                  "universal-sentence-encoder-large/5")
-
-    articles = [sentence]
-    for filename in os.listdir(corpus_path):
-        if not filename.endswith('.md'):
-            continue
-        with open(f'{corpus_path}/{filename}',
-                  mode='r', encoding='utf-8') as file:
-            articles.append(file.read())
 
     embeddings = embed(articles)
     # The semantic similarity of two sentences is
