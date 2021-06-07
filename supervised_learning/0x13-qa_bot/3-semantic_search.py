@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-Performs semantic search on a corpus of documents
+Performs semantic search on a corpus of documents.
+https://tfhub.dev/google/universal-sentence-encoder-large/5
 """
 import tensorflow_hub as hub
 import os
