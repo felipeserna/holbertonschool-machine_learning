@@ -26,7 +26,7 @@ def semantic_search(corpus_path, sentence):
                  "universal-sentence-encoder-large/5")
 
     # sentence + 91 documents
-    # (92, 512) vectors
+    # (92, 512)
     embeddings = embed(documents)
     # The semantic similarity of two sentences is
     # the inner product of the encodings.
