@@ -12,23 +12,29 @@ def semantic_search(corpus_path, sentence):
     """
     Returns: the reference text of the document most similar to 'sentence'
     """
-    articles = [sentence]
+    documents = [sentence]
 
     for filename in os.listdir(corpus_path):
         if filename.endswith('.md'):
             with open(corpus_path + '/' + filename,
                       mode='r', encoding='utf-8') as file:
-                articles.append(file.read())
+                documents.append(file.read())
 
+    # Load model that encodes text into 512 dimensional vectors
     embed = \
         hub.load("https://tfhub.dev/google/" +
                  "universal-sentence-encoder-large/5")
 
-    embeddings = embed(articles)
+    # sentence + 91 documents
+    # (92, 512) vectors
+    embeddings = embed(documents)
     # The semantic similarity of two sentences is
     # the inner product of the encodings.
+    # (92, 92) Correlation matrix
     corr = np.inner(embeddings, embeddings)
-    closest = np.argmax(corr[0, 1:])
-    reference = articles[closest + 1]
+    # most similar excluding itself
+    most_similar = np.argmax(corr[0, 1:])
+    # Add 1 because of the above line
+    text = documents[most_similar + 1]
 
-    return reference
+    return text
