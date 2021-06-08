@@ -11,7 +11,6 @@ def question_answer(question, reference):
     """
     Returns: a string containing the answer.
     If no answer is found, return None.
-    This function was modified for Task 2
     """
     tokenizer = \
         BertTokenizer.from_pretrained('bert-large-uncased' +
@@ -53,7 +52,7 @@ def question_answer(question, reference):
     # print(question_answer('Not a valid question?', reference))
     # output: None
     if not answer:
-        return "Sorry, I do not understand your question."
+        return None
     return answer
 
 
@@ -68,4 +67,8 @@ def answer_loop(reference):
             print("A: Goodbye")
             exit()
         else:
-            print("A:", question_answer(question, reference))
+            answer = question_answer(question, reference)
+            if answer is None:
+                print("A: Sorry, I do not understand your question.")
+            else:
+                print("A:", answer)
