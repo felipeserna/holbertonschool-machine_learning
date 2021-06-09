@@ -51,7 +51,7 @@ def question_answer(question, reference):
     # 0-main.py
     # print(question_answer('Not a valid question?', reference))
     # output: None
-    if not answer:
+    if not answer or question in answer:
         return None
     return answer
 
