@@ -3,10 +3,7 @@
 Loads the pre-made FrozenLakeEnv environment
 from OpenAI’s gym
 """
-import numpy as np
 import gym
-import random
-import time
 
 
 def load_frozen_lake(desc=None, map_name=None, is_slippery=False):
