@@ -13,21 +13,16 @@ def play(env, Q, max_steps=100):
     env.reset()
     state = env.reset()
     done = False
-    for step in range(max_steps):
+    for _ in range(max_steps):
 
         # Take the action (index) that have the maximum expected future reward
         # given that state
         action = np.argmax(Q[state, :])
 
-        new_state, reward, done, info = env.step(action)
+        new_state, reward, done, _ = env.step(action)
 
+        env.render()
         if done:
-            # Here, we decide to only print the last state
-            # (to see if our agent is on the goal or fall into an hole)
-            env.render()
-
-            # We print the number of step it took.
-            print("Number of steps", step)
             break
         state = new_state
     env.close()
