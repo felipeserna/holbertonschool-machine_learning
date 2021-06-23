@@ -13,6 +13,8 @@ def play(env, Q, max_steps=100):
     env.reset()
     state = env.reset()
     done = False
+    env.render()
+
     for _ in range(max_steps):
 
         # Take the action (index) that have the maximum expected future reward
