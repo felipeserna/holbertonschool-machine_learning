@@ -50,3 +50,16 @@ $ pip install --user scipy==1.3
 $ pip install --user pycodestyle==2.5
 ```
 To check that all have been successfully downloaded, use `pip list`.
+
+The most difficult challenges encountered with these projects have been related to translate mathematics into Python code. Some other challenges have been related to hardware resources such as memory and processor. The latter have been solved using Colab from Google, which allows us to use a remote GPU for expensive computations.
+
+## Author:
+Felipe Serna <1509@holbertonschool.com>
+
+Chemical Engineer with skills in the design of industrial processes for the elaboration of new products with added value, taking into account economic, environmental and safety restrictions. Knowledge in water treatment, integrated management systems HSEQ and GLP. High interest in fats and oils, particularly for the manufacture of biodiesel. In his Chemical Engineering thesis he designed and built the first microreactor in Colombia for manufacturing biodiesel.
+
+[LinkedIn profile](https://www.linkedin.com/in/felipesernabarbosa/)
+
+[Twitter](https://twitter.com/felipesernabar1)
+
+[Porfolio Project repository](https://github.com/skillshare-mentorship/holberton-live-experience)
