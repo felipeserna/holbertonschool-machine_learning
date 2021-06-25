@@ -1,4 +1,4 @@
-# Repository for Holberton Machine Learning projects.
+# Repository for Holberton School Machine Learning projects.
 Computers can learn similarly as we do. Machine learning is a subfield of artificial intelligence (AI). Conventionally, algorithms are instructions to computers for solving a particular problem. The paradigm of Machine learning algorithms is to train computers with big sets of data inputs and by statistical analysis output (predict) values that are in a specific range.
 
 This repository is entirely written in Python (*.py) and Jupyter Notebook (\*.ipynb), and has 4 categories of projects that are the base of Machine Learning.
