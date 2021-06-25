@@ -7,6 +7,46 @@ The first category is "Math", which includes Linear Algebra, Plotting, Calculus,
 
 The second category is "Supervised Learning", in which input data is labeled so that after training, the machine can predict labels for unseen data.
 
-<p align="center">
-  <img width="460" height="260" src="./supervised_learning/0x0A-object_detection/detections/nina.jpeg">
-</p>
+Here is an example: [chatbot](https://github.com/felipeserna/holbertonschool-machine_learning/tree/master/supervised_learning/0x13-qa_bot)
+
+A chatbot is trained with a set of documents and then it can answer questions.
+```
+$ cat 4-main.py
+#!/usr/bin/env python3
+
+question_answer = __import__('4-qa').question_answer
+
+question_answer('ZendeskArticles')
+$ ./4-main.py
+Q: When are PLDs?
+A: on - site days from 9 : 00 am to 3 : 00 pm
+Q: What are Mock Interviews?
+A: help you train for technical interviews
+Q: What does PLD stand for?
+A: peer learning days
+Q: goodbye
+A: Goodbye
+$
+```
+
+The third category is "Unsupervised Learning", where training data is unlabeled and the machine learns to classify data with similar properties.
+
+The fourth category is "Reinforcement Learning", where an agent is trained based on positive and negative rewards.
+
+## Installing most important libraries
+```
+$ sudo apt-get install python3-pip
+```
+Installing pip 19.1
+```
+wget https://bootstrap.pypa.io/get-pip.py
+sudo python3 get-pip.py
+rm get-pip.py
+```
+Installing numpy 1.15, scipy 1.3, and pycodestyle 2.5
+```
+$ pip install --user numpy==1.15
+$ pip install --user scipy==1.3
+$ pip install --user pycodestyle==2.5
+```
+To check that all have been successfully downloaded, use `pip list`.
