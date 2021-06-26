@@ -62,4 +62,4 @@ Chemical Engineer with skills in the design of industrial processes for the elab
 
 [Twitter](https://twitter.com/felipesernabar1)
 
-[Porfolio Project repository](https://github.com/skillshare-mentorship/holberton-live-experience)
+[Portfolio Project repository](https://github.com/felipeserna/Portfolio_Foundations)
