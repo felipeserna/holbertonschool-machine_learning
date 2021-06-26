@@ -101,8 +101,8 @@ class Yolo:
             bh = ph * np.exp(t_h)
 
             # normalize to model input size
-            input_width = self.model.input.shape[1].value
-            input_height = self.model.input.shape[2].value
+            input_width = int(self.model.input.shape[1])
+            input_height = int(self.model.input.shape[2])
             bw /= input_width
             bh /= input_height
 
@@ -212,8 +212,8 @@ class Yolo:
         """
         Returns a tuple of (pimages, image_shapes)
         """
-        input_w = self.model.input.shape[1].value
-        input_h = self.model.input.shape[2].value
+        input_w = int(self.model.input.shape[1])
+        input_h = int(self.model.input.shape[2])
 
         pimages_list = []
         image_shapes_list = []
@@ -243,7 +243,7 @@ class Yolo:
         """
         for i in range(len(boxes)):
             # Box scores should be rounded to 2 decimal places
-            score = "{:.2f}".format(box_scores[i])
+            score = " {:.2f}".format(box_scores[i])
 
             # BOXES
             # Top left corner of image
@@ -259,16 +259,18 @@ class Yolo:
                                   start_point, end_point,
                                   color, thickness)
 
-            # Text should be written 5 pixels
-            # above the top left corner of the box.
+            # Text should be written 5 pixels (it was changed to 10 pixels
+            # for better readability) above the top left corner of the box.
             # org is the Bottom-left corner of the text string in the image.
-            org = (int(boxes[i, 0]), int(boxes[i, 1] - 5))
-            fontScale = 0.5
+            org = (int(boxes[i, 0]), int(boxes[i, 1] - 10))
+            # fontScale was changed from 0.5 to 0.9 for better readability
+            fontScale = 0.9
 
             # Red color in BGR
             color = (0, 0, 255)
 
-            thickness = 1
+            # thickness was changed from 1 to 2 for better readability
+            thickness = 2
             image = cv2.putText(image,
                                 self.class_names[box_classes[i]] + score,
                                 org, cv2.FONT_HERSHEY_SIMPLEX,
