@@ -33,6 +33,7 @@ pip install --user h5py
 ```
 ## Tasks
 0. Breakout
+
 Write a python script `train.py` that utilizes `keras`, `keras-rl`, and `gym` to train an agent that can play Atari’s Breakout:
 
 * Your script should utilize `keras-rl`‘s `DQNAgent`, `SequentialMemory`, and `EpsGreedyQPolicy`
@@ -42,8 +43,8 @@ Write a python script `play.py` that can display a game played by the agent trai
 
 * Your script should load the policy network saved in `policy.h5`
 * Your agent should use the `GreedyQPolicy`
-**Repo:**
 
+**Repo:**
 * GitHub repository: `holbertonschool-machine_learning`
 * Directory: `reinforcement_learning/0x01-deep_q_learning`
 * File: `train.py, play.py`
