@@ -109,7 +109,7 @@ if __name__ == '__main__':
 
     # Train the model
     dqn.fit(env,
-            nb_steps=100000,
+            nb_steps=10000000,
             log_interval=10000,
             visualize=False,
             verbose=2)
