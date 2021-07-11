@@ -10,10 +10,10 @@ def td_lambtha(env, V, policy, lambtha, episodes=5000, max_steps=100,
     """
     Returns: V, the updated value estimate
     """
-    n = env.observation_space.n
+    state_space_size = env.observation_space.n
 
     # Eligibility traces
-    Et = [0 for _ in range(n)]
+    Et = [0 for _ in range(state_space_size)]
 
     for _ in range(episodes):
         state = env.reset()
@@ -23,10 +23,10 @@ def td_lambtha(env, V, policy, lambtha, episodes=5000, max_steps=100,
             action = policy(state)
             new_state, reward, done, _ = env.step(action)
             # Goal
-            if env.desc.reshape(n)[new_state] == b'G':
+            if env.desc.reshape(state_space_size)[new_state] == b'G':
                 reward = 1
             # Hole
-            if env.desc.reshape(n)[new_state] == b'H':
+            if env.desc.reshape(state_space_size)[new_state] == b'H':
                 reward = -1
             # TD error
             delta_t = reward + gamma * V[new_state] - V[state]
