@@ -13,20 +13,20 @@ def monte_carlo(env, V, policy, episodes=5000, max_steps=100,
     Returns: V, the updated value estimate
     """
     for i in range(episodes):
-        s = env.reset()
+        state = env.reset()
         episode = []
         for _ in range(max_steps):
-            action = policy(s)
-            s_new, reward, done, _ = env.step(action)
-            episode.append([s, action, reward, s_new])
+            action = policy(state)
+            new_state, reward, done, _ = env.step(action)
+            episode.append([state, action, reward, new_state])
             if done:
                 break
-            s = s_new
+            state = new_state
         episode = np.array(episode, dtype=int)
         G = 0
         for _, step in enumerate(episode[::-1]):
-            s, action, reward, _ = step
+            state, action, reward, _ = step
             G = gamma * G + reward
-            if s not in episode[:i, 0]:
-                V[s] = V[s] + alpha * (G - V[s])
+            if state not in episode[:i, 0]:
+                V[state] = V[state] + alpha * (G - V[state])
     return V
