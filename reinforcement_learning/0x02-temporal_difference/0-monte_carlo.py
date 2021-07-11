@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """
-Performs the Monte Carlo algorithm
+Performs the Monte Carlo algorithm.
+First-visit MC:
+Average returns only for first time s is visited in an episode.
 """
-import gym
 import numpy as np
 
 
@@ -11,3 +12,21 @@ def monte_carlo(env, V, policy, episodes=5000, max_steps=100,
     """
     Returns: V, the updated value estimate
     """
+    for i in range(episodes):
+        s = env.reset()
+        episode = []
+        for _ in range(max_steps):
+            action = policy(s)
+            s_new, reward, done, _ = env.step(action)
+            episode.append([s, action, reward, s_new])
+            if done:
+                break
+            s = s_new
+        episode = np.array(episode, dtype=int)
+        G = 0
+        for _, step in enumerate(episode[::-1]):
+            s, action, reward, _ = step
+            G = gamma * G + reward
+            if s not in episode[:i, 0]:
+                V[s] = V[s] + alpha * (G - V[s])
+    return V
