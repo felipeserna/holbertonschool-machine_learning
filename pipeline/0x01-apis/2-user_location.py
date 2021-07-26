@@ -6,6 +6,7 @@ Your code should not be executed when the file is imported.
 """
 import requests
 import sys
+import time
 
 
 if __name__ == '__main__':
@@ -20,3 +21,14 @@ if __name__ == '__main__':
 
     elif my_status == 404:
         print("Not found")
+
+    elif my_status == 403:
+        """
+        Reset in X min. X is the number of minutes from now and the value of
+        X-Ratelimit-Reset
+        """
+        Now = int(time.time())
+        Reset = int(requests.get(url).headers['X-Ratelimit-Reset'])
+        seconds = Reset - Now
+        X = seconds / 60
+        print("Reset in {} min".format(int(X)))
