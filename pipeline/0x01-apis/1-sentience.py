@@ -13,8 +13,7 @@ def sentientPlanets():
     planets = []
 
     while url is not None:
-        r = requests.get(url)
-        results = r.json()["results"]
+        results = requests.get(url).json()["results"]
 
         for species in results:
             if "sentient" in [species["classification"],
@@ -23,9 +22,9 @@ def sentientPlanets():
                 planet_url = species["homeworld"]
 
                 if planet_url is not None:
-                    p = requests.get(planet_url).json()
-                    planets.append(p["name"])
+                    planet = requests.get(planet_url).json()["name"]
+                    planets.append(planet)
 
-        url = r.json()["next"]
+        url = requests.get(url).json()["next"]
 
     return planets
