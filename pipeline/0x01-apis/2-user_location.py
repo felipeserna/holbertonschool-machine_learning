@@ -13,6 +13,10 @@ if __name__ == '__main__':
 
     # https://api.github.com/users/holbertonschool
 
-    location = requests.get(url).json()["location"]
+    my_status = requests.get(url).status_code #json()["location"].status_code
 
-    print(location)
+    if my_status == 200:
+        print(requests.get(url).json()["location"])
+
+    elif my_status == 404:
+        print("Not found")
