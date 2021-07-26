@@ -13,7 +13,7 @@ if __name__ == '__main__':
 
     # https://api.github.com/users/holbertonschool
 
-    my_status = requests.get(url).status_code #json()["location"].status_code
+    my_status = requests.get(url).status_code
 
     if my_status == 200:
         print(requests.get(url).json()["location"])
