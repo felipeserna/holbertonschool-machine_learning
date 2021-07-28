@@ -1,6 +1,7 @@
 # 0x02. Databases
 ## Specializations > Machine Learning > The Pipeline
 After fetching data via APIs, storing them is also really important for training a Machine Learning model.
+
 In this project you will touch 2:
 * Relation database
 * Not Relation database
