@@ -9,4 +9,6 @@ def change_brightness(image, max_delta):
     """
     Returns the altered image
     """
-    
+    return tf.image.adjust_brightness(
+        image, max_delta
+    )
