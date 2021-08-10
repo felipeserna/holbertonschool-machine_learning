@@ -16,7 +16,7 @@ def shear_image(image, intensity):
 
     # Performs a random spatial shear of a Numpy image tensor.
     sheared_numpy = tf.keras.preprocessing.image.random_shear(
-        numpy_array, intensity, row_axis=0, col_axis=1, channel_axis=2
+        numpy_array, intensity
     )
 
     # Converts a 3D Numpy array to a PIL Image instance.
