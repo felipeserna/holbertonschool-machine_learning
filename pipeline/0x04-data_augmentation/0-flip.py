@@ -9,4 +9,4 @@ def flip_image(image):
     """
     Returns the flipped image
     """
-    
+    return tf.image.flip_left_right(image)
