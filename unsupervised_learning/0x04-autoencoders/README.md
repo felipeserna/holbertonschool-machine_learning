@@ -22,3 +22,6 @@
 2. Convolutional Autoencoder
 
 3. Variational Autoencoder
+
+## Note
+If Tensorflow 2: in main files, change tf.set_random_seed(0) to tf.random.set_seed(0)
